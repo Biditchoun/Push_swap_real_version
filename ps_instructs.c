@@ -6,18 +6,22 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:57:30 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/11 18:36:25 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/12 19:56:12 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	pa(t_stack **a, t_stack **b)
+int	pa(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
 {
 	t_stack	*node_to_move;
 
 	if (!*b)
 		return (0);
+	if (*b == *last_b)
+		*last_b = NULL;
+	if (!*a)
+		*last_a = *b;
 	node_to_move = *b;
 	*b = (*b)->next;
 	if (*b)
@@ -29,12 +33,16 @@ int	pa(t_stack **a, t_stack **b)
 	return (1);
 }
 
-int	pb(t_stack **a, t_stack **b)
+int	pb(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
 {
 	t_stack	*node_to_move;
 
 	if (!*a)
 		return (0);
+	if (*a == *last_a)
+		*last_a = NULL;
+	if (!*b)
+		*last_b = *a;
 	node_to_move = *a;
 	*a = (*a)->next;
 	if (*a)
@@ -46,12 +54,14 @@ int	pb(t_stack **a, t_stack **b)
 	return (1);
 }
 
-int	sa(t_stack **a)
+int	sa(t_stack **a, t_stack **last_a)
 {
 	t_stack	*future_first_node;
 
 	if (!*a || !(*a)->next)
 		return (0);
+	if ((*a)->next == *last_a)
+		*last_a = *a;
 	future_first_node = (*a)->next;
 	if (future_first_node->next)
 		future_first_node->next->prev = *a;
@@ -63,12 +73,14 @@ int	sa(t_stack **a)
 	return (1);
 }
 
-int	sb(t_stack **b)
+int	sb(t_stack **b, t_stack **last_b)
 {
 	t_stack	*future_first_node;
 
 	if (!*b || !(*b)->next)
 		return (0);
+	if ((*b)->next == *last_b)
+		*last_b = *b;
 	future_first_node = (*b)->next;
 	if (future_first_node->next)
 		future_first_node->next->prev = *b;
@@ -80,9 +92,9 @@ int	sb(t_stack **b)
 	return (1);
 }
 
-int	ss(t_stack **a, t_stack **b)
+int	ss(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
 {
-	sa(a);
-	sb(b);
+	sa(a, last_a);
+	sb(b, last_b);
 	return (1);
 }

@@ -6,22 +6,34 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/11 18:38:18 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/12 20:08:46 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void	print_list(t_stack *a)
+/*
+void	check_list(t_stack *a, t_stack *last)
 {
 #include <stdio.h>
-	while (a)
-	{
-		printf("%i : %p\n%p %p\n", a->nb, a, a->prev, a->next);
-		a = a->next;
-	}
-}
+	t_stack *cp;
 
+	if (!a)
+		return ;
+	cp = a->next;
+	printf("%i ", a->nb);
+	while (cp)
+	{
+		if (cp->prev != a)
+			printf("wrong prev\n");
+		printf("%i ", cp->nb);
+		a = a->next;
+		cp = cp->next;
+	}
+	if (last != a)
+		printf("wrong last : %i\n", last->nb);
+	printf("\n");
+}
+*/
 t_stack	*set_up_list(int *args, int argssize)
 {
 	int		*args_cpy;
@@ -35,6 +47,18 @@ t_stack	*set_up_list(int *args, int argssize)
 	free(args_cpy);
 	rt = convert_to_lists(args, argssize);
 	return (rt);
+}
+
+int	do_the_magic(t_stack *a, t_stack *b)
+{
+	t_stack	*last_a;
+	t_stack	*last_b;
+
+	last_a = a;
+	while (last_a->next)
+		last_a = last_a->next;
+	last_b = NULL;
+	return (0);
 }
 
 int	main(int ac, char **av)
@@ -59,11 +83,7 @@ int	main(int ac, char **av)
 		return (rtint_free(-1, args));
 	free(args);
 	b = NULL;
-	sa(&a);
-	print_list(a);
-	printf("\n");
-	sa(&a);
-	print_list(a);
+	do_the_magic(a, b);
 	free_list_rtptr(a, NULL);
 	return (0);
 }
