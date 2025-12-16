@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:57:30 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/12 19:56:12 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/16 14:21:46 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,12 @@ int	pb(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
 	return (1);
 }
 
-int	sa(t_stack **a, t_stack **last_a)
+int	sa(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
 {
 	t_stack	*future_first_node;
 
+	(void)b;
+	(void)last_b;
 	if (!*a || !(*a)->next)
 		return (0);
 	if ((*a)->next == *last_a)
@@ -73,10 +75,12 @@ int	sa(t_stack **a, t_stack **last_a)
 	return (1);
 }
 
-int	sb(t_stack **b, t_stack **last_b)
+int	sb(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
 {
 	t_stack	*future_first_node;
 
+	(void)a;
+	(void)last_a;
 	if (!*b || !(*b)->next)
 		return (0);
 	if ((*b)->next == *last_b)
@@ -94,7 +98,7 @@ int	sb(t_stack **b, t_stack **last_b)
 
 int	ss(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
 {
-	sa(a, last_a);
-	sb(b, last_b);
+	sa(a, last_a, b, last_b);
+	sb(a, last_a, b, last_b);
 	return (1);
 }

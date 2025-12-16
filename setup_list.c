@@ -6,22 +6,11 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 16:17:48 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/11 18:19:24 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/16 12:33:38 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void	*free_list_rtptr(t_stack *start, void *rt)
-{
-	while (start->next)
-	{
-		start = start->next;
-		free(start->prev);
-	}
-	free(start);
-	return (rt);
-}
 
 t_stack	*convert_to_lists(int *args, int argssize)
 {
