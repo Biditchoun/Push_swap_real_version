@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 16:17:48 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/16 12:33:38 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/18 18:45:56 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_stack	*convert_to_lists(int *args, int argssize)
 	rt = malloc(sizeof(t_stack));
 	if (!rt)
 		return (NULL);
-	rt->prev = NULL;
 	rt->nb = args[0];
 	current = rt;
 	i = 0;
@@ -30,13 +29,14 @@ t_stack	*convert_to_lists(int *args, int argssize)
 	{
 		current->next = malloc(sizeof(t_stack));
 		if (!current->next)
-			return (free_list_rtptr(rt, NULL));
+			return (free_lists_rtptr(rt, NULL, NULL));
 		previous = current;
 		current = current->next;
 		current->nb = args[i];
 		current->prev = previous;
 	}
 	current->next = NULL;
+	rt->prev = current;
 	return (rt);
 }
 
@@ -55,24 +55,64 @@ void	replace_value_with_index(int *a, int *a_cpy, int a_size)
 	}
 }
 
-void	bubble_sort(int *a, int a_size)
+void	*free_lists_rtptr(t_stack *l1, t_stack *l2, void *rt)
 {
-	int	i;
-	int	j;
-	int	buff;
-
-	i = -1;
-	while (++i < a_size)
+	while (l1 && l1->next)
 	{
-		j = i;
-		while (++j < a_size)
-		{
-			if (a[i] > a[j])
-			{
-				buff = a[i];
-				a[i] = a[j];
-				a[j] = buff;
-			}
-		}
+		l1 = l1->next;
+		free(l1->prev);
 	}
+	free(l1);
+	while (l2 && l2->next)
+	{
+		l2 = l2->next;
+		free(l2->prev);
+	}
+	free(l2);
+	return (rt);
+}
+
+int	free_lists_rtint(t_stack *l1, t_stack *l2, int rt)
+{
+	while (l1 && l1->next)
+	{
+		l1 = l1->next;
+		free(l1->prev);
+	}
+	free(l1);
+	while (l2 && l2->next)
+	{
+		l2 = l2->next;
+		free(l2->prev);
+	}
+	free(l2);
+	return (rt);
+}
+
+t_stack	*copy_list(t_stack *a)
+{
+	t_stack	*rt;
+	t_stack	*curr;
+	t_stack	*prev;
+
+	rt = malloc(sizeof(t_stack));
+	if (!rt)
+		return (NULL);
+	curr = rt;
+	while (a)
+	{
+		curr->nb = a->nb;
+		curr->prev = prev;
+		a = a->next;
+		prev = curr;
+		if (!a)
+			break ;
+		curr->next = malloc(sizeof(t_stack));
+		if (!(curr->next) && a)
+			return (free_lists_rtptr(rt, NULL, NULL));
+		curr = curr->next;
+	}
+	curr->next = NULL;
+	rt->prev = curr;
+	return (rt);
 }

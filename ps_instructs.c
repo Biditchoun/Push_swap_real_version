@@ -6,99 +6,86 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:57:30 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/16 14:21:46 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:53:44 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	pa(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
+int	pa(t_stack **a, t_stack **b, int fd)
 {
 	t_stack	*node_to_move;
 
-	if (!*b)
+	if (!b || !*b)
 		return (0);
-	if (*b == *last_b)
-		*last_b = NULL;
-	if (!*a)
-		*last_a = *b;
 	node_to_move = *b;
 	*b = (*b)->next;
 	if (*b)
-		(*b)->prev = NULL;
+		(*b)->prev = node_to_move->prev;
+	node_to_move->prev = node_to_move;
+	if (*a)
+		node_to_move->prev = (*a)->prev;
 	if (*a)
 		(*a)->prev = node_to_move;
 	node_to_move->next = *a;
 	*a = node_to_move;
+	write(fd, "pa\n", 3);
 	return (1);
 }
 
-int	pb(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
+int	pb(t_stack **a, t_stack **b, int fd)
 {
 	t_stack	*node_to_move;
 
-	if (!*a)
+	if (!a || !*a)
 		return (0);
-	if (*a == *last_a)
-		*last_a = NULL;
-	if (!*b)
-		*last_b = *a;
 	node_to_move = *a;
 	*a = (*a)->next;
 	if (*a)
-		(*a)->prev = NULL;
+		(*a)->prev = node_to_move->prev;
+	node_to_move->prev = node_to_move;
+	if (*b)
+		node_to_move->prev = (*b)->prev;
 	if (*b)
 		(*b)->prev = node_to_move;
 	node_to_move->next = *b;
 	*b = node_to_move;
+	write(fd, "pb\n", 3);
 	return (1);
 }
 
-int	sa(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
+int	sa(t_stack **a, t_stack **b, int fd)
 {
-	t_stack	*future_first_node;
+	int	buff;
 
 	(void)b;
-	(void)last_b;
-	if (!*a || !(*a)->next)
+	if (!a || !*a || !(*a)->next)
 		return (0);
-	if ((*a)->next == *last_a)
-		*last_a = *a;
-	future_first_node = (*a)->next;
-	if (future_first_node->next)
-		future_first_node->next->prev = *a;
-	(*a)->prev = future_first_node;
-	(*a)->next = future_first_node->next;
-	future_first_node->prev = NULL;
-	future_first_node->next = *a;
-	*a = future_first_node;
+	buff = (*a)->nb;
+	(*a)->nb = (*a)->next->nb;
+	(*a)->next->nb = buff;
+	write(fd, "sa\n", 3);
 	return (1);
 }
 
-int	sb(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
+int	sb(t_stack **a, t_stack **b, int fd)
 {
-	t_stack	*future_first_node;
+	int	buff;
 
 	(void)a;
-	(void)last_a;
-	if (!*b || !(*b)->next)
+	if (!b || !*b || !(*b)->next)
 		return (0);
-	if ((*b)->next == *last_b)
-		*last_b = *b;
-	future_first_node = (*b)->next;
-	if (future_first_node->next)
-		future_first_node->next->prev = *b;
-	(*b)->prev = future_first_node;
-	(*b)->next = future_first_node->next;
-	future_first_node->prev = NULL;
-	future_first_node->next = *b;
-	*b = future_first_node;
+	buff = (*b)->nb;
+	(*b)->nb = (*b)->next->nb;
+	(*b)->next->nb = buff;
+	write(fd, "sb\n", 3);
 	return (1);
 }
 
-int	ss(t_stack **a, t_stack **last_a, t_stack **b, t_stack **last_b)
+int	ss(t_stack **a, t_stack **b, int fd)
 {
-	sa(a, last_a, b, last_b);
-	sb(a, last_a, b, last_b);
+	sa(a, b, 3);
+	sb(a, b, 3);
+	write(fd, "ss\n", 3);
 	return (1);
 }

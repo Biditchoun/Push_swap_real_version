@@ -6,22 +6,24 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/16 15:59:29 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/18 18:46:29 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
 
-void	check_list(t_stack *a, t_stack *last)
+void	check_list(t_stack *a)
 {
 #include <stdio.h>
 	t_stack *cp;
 
 	if (!a)
+	{	printf("null list\n");
 		return ;
+	}
 	cp = a->next;
-	printf("%i ", a->nb);
+	printf("Last : %i, list : %i ", a->prev->nb, a->nb);
 	while (cp)
 	{
 		if (cp->prev != a)
@@ -30,9 +32,29 @@ void	check_list(t_stack *a, t_stack *last)
 		a = a->next;
 		cp = cp->next;
 	}
-	if (last != a)
-		printf("wrong last : %i\n", last->nb);
 	printf("\n");
+}
+
+void	bubble_sort(int *a, int a_size)
+{
+	int	i;
+	int	j;
+	int	buff;
+
+	i = -1;
+	while (++i < a_size)
+	{
+		j = i;
+		while (++j < a_size)
+		{
+			if (a[i] > a[j])
+			{
+				buff = a[i];
+				a[i] = a[j];
+				a[j] = buff;
+			}
+		}
+	}
 }
 
 t_stack	*set_up_list(int *args, int argssize)
@@ -52,16 +74,13 @@ t_stack	*set_up_list(int *args, int argssize)
 
 int	do_the_magic(t_stack *a, int argssize)
 {
-	t_stack	*a_cpy;
-	t_stack	*last_a;
-	t_stack	*last_a_cpy;
+	t_stack	*b;
 	t_algo	info;
-//	int		i;
 
-	last_a = get_last_node(a);
-	info.curr_moves = bruteforce(&a, NULL, INT_MAX, 3);
+	b = NULL;
+	info.curr_moves = bruteforce(&a, &b, INT_MAX, 3);
 	if (info.curr_moves)
-		return (bruteforce(&a, NULL, INT_MAX, 1));
+		return (bruteforce(&a, &b, INT_MAX, 1));
 	(void)argssize;
 /*	info.min_moves = INT_MAX;
 	info.algo_nb = 1;
@@ -107,6 +126,6 @@ int	main(int ac, char **av)
 		return (rtint_free(-1, args));
 	free(args);
 	rt = do_the_magic(a, argssize);
-	free_list_rtptr(a, NULL);
+	free_lists_rtptr(a, NULL, NULL);
 	return (rt);
 }
