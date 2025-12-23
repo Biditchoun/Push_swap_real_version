@@ -6,11 +6,26 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/18 18:46:31 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/23 23:19:10 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+int	check_if_brutesorted(t_stack *a_cpy, int amount)
+{
+	int		max;
+
+	max = -1;
+	while (amount-- && a_cpy)
+	{
+		if (max > a_cpy->nb)
+			return (0);
+		max = a_cpy->nb;
+		a_cpy = a_cpy->next;
+	}
+	return (1);
+}
 
 void	get_fpointers(void **f_instructs)
 {
@@ -28,7 +43,7 @@ void	get_fpointers(void **f_instructs)
 	f_instructs[11] = NULL;
 }
 
-int	conclude_bruteforce(t_stack **a, t_stack **b, int *instructs, int fd)
+int	apply_instructs(t_stack **a, t_stack **b, int *instructs, int fd)
 {
 	void	*f_instructs[12];
 	int		(*f)(t_stack **, t_stack **, int);
@@ -44,6 +59,31 @@ int	conclude_bruteforce(t_stack **a, t_stack **b, int *instructs, int fd)
 	return (i);
 }
 
+void	undo_changes(t_stack **a_cpy, t_stack **b_cpy,
+		int *instructs, void **f_instructs)
+{
+	int	(*f)(t_stack **, t_stack **, int);
+	int	i;
+
+	i = 0;
+	while (instructs[i] > -1)
+		i++;
+	while (--i > -1)
+	{
+		if (instructs[i] == 0)
+			f = f_instructs[1];
+		else if (instructs[i] == 1)
+			f = f_instructs[0];
+		else if (instructs[i] >= 2 && instructs[i] <= 4)
+			f = f_instructs[instructs[i]];
+		else if (instructs[i] >= 5 && instructs[i] <= 7)
+			f = f_instructs[instructs[i] + 3];
+		else if (instructs[i] >= 8 && instructs[i] <= 10)
+			f = f_instructs[instructs[i] - 3];
+		f(a_cpy, b_cpy, 66);
+	}
+}
+
 int	bruteforce(t_stack **a, t_stack **b, int amount, int fd)
 {
 	int		instructs[BRUTEFORCE + 1];
@@ -56,19 +96,25 @@ int	bruteforce(t_stack **a, t_stack **b, int amount, int fd)
 	instructs[BRUTEFORCE] = -1;
 	instructs[0] = -1;
 	rt = 0;
+	a_cpy = copy_list(*a);
+	b_cpy = copy_list(*b);
+	if ((*a && !a_cpy) || (*b && !b_cpy))
+		return (free_lists_rtint(a_cpy, b_cpy, 0));
 	while (instructs[BRUTEFORCE] < 0)
 	{
-		a_cpy = copy_list(*a);
-		b_cpy = copy_list(*b);
-		if ((a && !a_cpy) || (b && !b_cpy))
-			return (free_lists_rtint(a_cpy, b_cpy, 0));
-		get_next_try(instructs);
-		apply_instructs(&a_cpy, &b_cpy, instructs, f_instructs);
-		if (check_if_brutesorted(*a, a_cpy, amount))
-			rt = conclude_bruteforce(a, b, instructs, fd);
-		free_lists_rtptr(a_cpy, b_cpy, NULL);
+/*#include <stdio.h>
+int i = -1;
+while (instructs[++i] > -1)
+	printf("%i ", instructs[i]);
+printf("\n");
+check_list(a_cpy);*/
+		get_next_try(instructs, amount, a);
+		apply_instructs(&a_cpy, &b_cpy, instructs, 66);
+		if (check_if_brutesorted(a_cpy, amount))
+			rt = apply_instructs(a, b, instructs, fd);
 		if (rt)
-			return (rt);
+			return (free_lists_rtint(a_cpy, b_cpy, rt));
+		undo_changes(&a_cpy, &b_cpy, instructs, f_instructs);
 	}
-	return (0);
+	return (free_lists_rtint(a_cpy, b_cpy, 0));
 }

@@ -6,18 +6,18 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 17:38:30 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/18 17:33:08 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/18 18:50:23 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strnstr(const char *big, const char *little, size_t len)
+int	strn_str(const char *big, const char *little, size_t len)
 {
 	size_t	i;
 	size_t	j;
 
-	if (!big || !little || len)
+	if (!big || !little || !len)
 		return (-1);
 	if (!little[0])
 		return (0);

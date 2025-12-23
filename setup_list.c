@@ -6,13 +6,13 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 16:17:48 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/18 18:45:56 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/23 23:11:46 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_stack	*convert_to_lists(int *args, int argssize)
+t_stack	*convert_to_list(int *args, int argssize)
 {
 	t_stack	*rt;
 	t_stack	*current;
@@ -96,19 +96,19 @@ t_stack	*copy_list(t_stack *a)
 	t_stack	*prev;
 
 	rt = malloc(sizeof(t_stack));
-	if (!rt)
-		return (NULL);
+	if (!rt || !a)
+		return (rtptr_free(NULL, rt));
 	curr = rt;
 	while (a)
 	{
 		curr->nb = a->nb;
 		curr->prev = prev;
 		a = a->next;
-		prev = curr;
 		if (!a)
 			break ;
+		prev = curr;
 		curr->next = malloc(sizeof(t_stack));
-		if (!(curr->next) && a)
+		if (!(curr->next))
 			return (free_lists_rtptr(rt, NULL, NULL));
 		curr = curr->next;
 	}
