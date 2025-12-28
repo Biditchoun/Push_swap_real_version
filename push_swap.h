@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/23 23:19:13 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/28 21:38:31 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ int		free_lists_rtint(t_stack *l1, t_stack *l2, int rt);
 
 int		bruteforce(t_stack **a, t_stack **b, int amount, int fd);
 void	get_next_try(int *instructs, int amount, t_stack **a);
+int		increment_and_fill(int *instructs, int incr);
+int		check_nb_pushes(int *instructs);
+int		check_pushes_proximity(int *instructs);
+int		check_b_actions(int *instructs);
 
 int		pa(t_stack **a, t_stack **b, int fd);
 int		pb(t_stack **a, t_stack **b, int fd);

@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/23 23:19:10 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/28 22:08:31 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	undo_changes(t_stack **a_cpy, t_stack **b_cpy,
 
 int	bruteforce(t_stack **a, t_stack **b, int amount, int fd)
 {
-	int		instructs[BRUTEFORCE + 1];
+	int		instructs[BRUTEFORCE + 2];
 	void	*f_instructs[12];
 	t_stack	*a_cpy;
 	t_stack	*b_cpy;
@@ -102,12 +102,11 @@ int	bruteforce(t_stack **a, t_stack **b, int amount, int fd)
 		return (free_lists_rtint(a_cpy, b_cpy, 0));
 	while (instructs[BRUTEFORCE] < 0)
 	{
-/*#include <stdio.h>
+#include <stdio.h>
 int i = -1;
 while (instructs[++i] > -1)
 	printf("%i ", instructs[i]);
 printf("\n");
-check_list(a_cpy);*/
 		get_next_try(instructs, amount, a);
 		apply_instructs(&a_cpy, &b_cpy, instructs, 66);
 		if (check_if_brutesorted(a_cpy, amount))

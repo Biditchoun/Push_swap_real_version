@@ -6,47 +6,63 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:14:34 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/23 23:07:38 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/28 22:38:39 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	check_pushes(int *instructs)
+int	end_case(int *instructs, int i)
 {
-	int	nb_pa;
-	int	nb_pb;
-	int	i;
-
-	nb_pa = 0;
-	nb_pb = 0;
-	i = -1;
-	while (instructs[++i] > -1)
-	{
-		if (instructs[i] == 0)
-			nb_pa++;
-		else if (instructs[i] == 1)
-			nb_pb++;
-		if (nb_pa > nb_pb)
-			break ;
-	}
-	if (nb_pa == nb_pb)
-		return (0);
-	if (nb_pb > nb_pa && --i > -1)
-		while (instructs[i] == 10)
-			i--;
-	instructs[i]++;
+	while (i > -1 && instructs[i] == 10)
+		i--;
+	if (i != -1)
+		return (increment_and_fill(instructs, i));
 	while (instructs[++i] > -1)
 		instructs[i] = 0;
+	instructs[i] = 0;
+	instructs[++i] = -1;
+	return (increment_and_fill(instructs, 0));
+}
+
+int	increment_and_fill(int *instructs, int incr)
+{
+	int	i;
+	int	b_size;
+
+	if (instructs[incr] == 10)
+		return (end_case(instructs, incr));
+	b_size = 0;
+	i = -1;
+	while (++i < incr)
+	{
+		if (instructs[i] == 0)
+			b_size--;;
+		if (instructs[i] == 1)
+			b_size++;
+	}
+	instructs[i]++;
+	if (instructs[i] == 1)
+		b_size++;
+	while (instructs[++i] > -1 && b_size--)
+		instructs[i] = 0;
+	incr = 0;
+	while (instructs[i] > -1)
+		instructs[i++] = ++incr % 2;
 	return (1);
 }
 
-void	get_next_valid_instructs(int *instructs, int amount, t_stack **a)
+int	get_next_valid_instructs(int *instructs, int amount, t_stack **a)
 {
 	(void)a;
 	(void)amount;
-	if (check_pushes(instructs))
-		get_next_valid_instructs(instructs, amount, a);
+	if (check_nb_pushes(instructs))
+		return (1);
+	if (check_pushes_proximity(instructs))
+		return (2);
+	else if (check_b_actions(instructs))
+		return (3);
+	return (0);
 }
 
 void	get_next_try(int *instructs, int amount, t_stack **a)
@@ -56,22 +72,13 @@ void	get_next_try(int *instructs, int amount, t_stack **a)
 	i = 0;
 	while (instructs[i] > -1)
 		i++;
-	i--;
-	while (i > -1 && instructs[i] == 10)
-		i--;
-	if (i < 0)
-	{
-		while (instructs[++i] > -1)
-			instructs[i] = 0;
-		instructs[i] = 0;
-		if (i < BRUTEFORCE)
-			instructs[i + 1] = -1;
-	}
-	else
+	if (i == 0)
 	{
 		instructs[i]++;
-		while (instructs[++i] > -1)
-			instructs[i] = 0;
+		instructs[++i] = -1;
 	}
-	get_next_valid_instructs(instructs, amount, a);
+	increment_and_fill(instructs, --i);
+	i = 1;
+	while (i)
+		i = get_next_valid_instructs(instructs, amount, a);
 }
