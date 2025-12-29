@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:14:34 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/28 22:38:39 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/29 00:24:41 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,14 @@ int	increment_and_fill(int *instructs, int incr)
 
 	if (instructs[incr] == 10)
 		return (end_case(instructs, incr));
+	if (instructs[incr] == -1)
+		return (0);
 	b_size = 0;
 	i = -1;
 	while (++i < incr)
 	{
 		if (instructs[i] == 0)
-			b_size--;;
+			b_size--;
 		if (instructs[i] == 1)
 			b_size++;
 	}
@@ -52,33 +54,32 @@ int	increment_and_fill(int *instructs, int incr)
 	return (1);
 }
 
-int	get_next_valid_instructs(int *instructs, int amount, t_stack **a)
+int	get_next_valid_instructs(t_bf *params, t_stack **a)
 {
 	(void)a;
-	(void)amount;
-	if (check_nb_pushes(instructs))
+	if (check_pushes(params->instructs))
 		return (1);
-	if (check_pushes_proximity(instructs))
+	if (check_b_instructs(params->instructs))
 		return (2);
-	else if (check_b_actions(instructs))
+	if (check_opposite_instructs(params->instructs))
 		return (3);
 	return (0);
 }
 
-void	get_next_try(int *instructs, int amount, t_stack **a)
+void	get_next_try(t_bf *params, t_stack **a)
 {
 	int	i;
 
 	i = 0;
-	while (instructs[i] > -1)
+	while (params->instructs[i] > -1)
 		i++;
 	if (i == 0)
 	{
-		instructs[i]++;
-		instructs[++i] = -1;
+		params->instructs[i]++;
+		params->instructs[++i] = -1;
 	}
-	increment_and_fill(instructs, --i);
+	increment_and_fill(params->instructs, i - 1);
 	i = 1;
 	while (i)
-		i = get_next_valid_instructs(instructs, amount, a);
+		i = get_next_valid_instructs(params, a);
 }

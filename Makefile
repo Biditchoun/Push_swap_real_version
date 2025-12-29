@@ -6,7 +6,7 @@ LIBFT_PATH = ${LIBFT_DIR}/
 
 SOURCES =	main.c handle_input.c setup_list.c\
 			ps_instructs.c r_instructs.c rr_instructs.c\
-			bruteforce.c bf_get_next_try.c bf_check_basic_things.c
+			bruteforce.c bf_get_next_try.c bf_basic_checks.c
 
 OBJECTS =	$(SOURCES:.c=.o)
 

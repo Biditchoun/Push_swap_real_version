@@ -6,11 +6,11 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 09:50:01 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/02 09:51:00 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/28 23:50:31 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	max(int i, int j)
+int	min(int i, int j)
 {
 	if (i < j)
 		return (i);

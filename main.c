@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/23 23:15:05 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/29 00:49:15 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,8 @@ int	do_the_magic(t_stack **a, int argssize)
 	info.min_moves = INT_MAX;
 	info.algo_nb = 1;
 /*	chunck_sorts(&info, &a, &b, argssize);
-	{instert other sorting algorithms}
-	{execute best performing algorithm indicated in info}
-*/
+	{insert other sorting algorithms}
+	{execute best performing algorithm, indicated in info}*/
 	return (0);
 }
 

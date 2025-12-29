@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:12:46 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/18 17:56:12 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/28 22:48:31 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	rra(t_stack **a, t_stack **b, int fd)
 	(*a)->prev->next = *a;
 	(*a)->prev->prev->next = NULL;
 	*a = (*a)->prev;
-	write(fd, "rra\n", 4);
+	if (fd)
+		write(1, "rra\n", 4);
 	return (1);
 }
 
@@ -32,14 +33,16 @@ int	rrb(t_stack **a, t_stack **b, int fd)
 	(*b)->prev->next = *b;
 	(*b)->prev->prev->next = NULL;
 	*b = (*b)->prev;
-	write(fd, "rrb\n", 4);
+	if (fd)
+		write(1, "rrb\n", 4);
 	return (1);
 }
 
 int	rrr(t_stack **a, t_stack **b, int fd)
 {
-	rra(a, b, 3);
-	rrb(a, b, 3);
-	write(fd, "rrr\n", 4);
+	rra(a, b, 0);
+	rrb(a, b, 0);
+	if (fd)
+		write(1, "rrr\n", 4);
 	return (1);
 }

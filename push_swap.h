@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/28 21:38:31 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2025/12/29 00:39:22 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ typedef struct s_stack
 	struct s_stack	*prev;
 }	t_stack;
 
-/*typedef struct	s_bruteforce
+typedef struct s_bruteforce
 {
-	int		instructs[BRUTEFORCE + 1];
+	int		instructs[BRUTEFORCE + 2];
 	void	*f_instructs[12];
 	int		amount_to_sort;
 	int		stack_size;
 }	t_bf;
-*/
+
 typedef struct s_algo
 {
 	int	curr_moves;
@@ -58,11 +58,11 @@ void	*free_lists_rtptr(t_stack *l1, t_stack *l2, void *rt);
 int		free_lists_rtint(t_stack *l1, t_stack *l2, int rt);
 
 int		bruteforce(t_stack **a, t_stack **b, int amount, int fd);
-void	get_next_try(int *instructs, int amount, t_stack **a);
+void	get_next_try(t_bf *params, t_stack **a);
 int		increment_and_fill(int *instructs, int incr);
-int		check_nb_pushes(int *instructs);
-int		check_pushes_proximity(int *instructs);
-int		check_b_actions(int *instructs);
+int		check_pushes(int *instructs);
+int		check_b_instructs(int *instructs);
+int		check_opposite_instructs(int *instr);
 
 int		pa(t_stack **a, t_stack **b, int fd);
 int		pb(t_stack **a, t_stack **b, int fd);
