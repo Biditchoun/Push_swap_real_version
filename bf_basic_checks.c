@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 20:50:16 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/29 00:39:04 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/04 21:12:28 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,29 +67,37 @@ int	check_b_instructs(int *instructs)
 	return (increment_and_fill(instructs, i));
 }
 
+void	change_opposite_instructs(int i, int *instr)
+{
+	if (instr[i] >= 2 && instr[i] <= 4)
+		instr[i + 1] = 4;
+	else if (instr[i] == 7 || (instr[i] == 6 && instr[i + 1] != 5))
+		instr[i + 1] = 10;
+	else if (instr[i] == 9)
+		instr[i + 1] = 8;
+	else if (instr[i] == 10)
+		instr[i + 1] = 7;
+}
+
 int	check_opposite_instructs(int *instr)
 {
 	int	i;
 
 	i = -1;
 	while (instr[++i] > -1)
-		if ((instr[i] == 2 && (instr[i + 1] == 2 || instr[i + 1] == 4))
-			|| (instr[i] == 3 && (instr[i + 1] == 3 || instr[i + 1] == 4))
-			|| (instr[i] == 4 && instr[i + 1] >= 2 && instr[i + 1] <= 4)
-			|| (instr[i] == 5 && (instr[i + 1] == 8 || instr[i + 1] == 10))
-			|| (instr[i] == 6 && (instr[i + 1] == 9 || instr[i + 1] == 10))
+		if (((instr[i] >= 2 && instr[i] <= 4)
+				&& (instr[i + 1] >= 2 && instr[i + 1] <= 4))
+			|| (instr[i] == 5 && (instr[i + 1] == 6
+					|| instr[i + 1] == 8 || instr[i + 1] == 10))
+			|| (instr[i] == 6 && (instr[i + 1] == 5
+					|| instr[i + 1] == 9 || instr[i + 1] == 10))
 			|| (instr[i] == 7 && instr[i + 1] >= 8 && instr[i + 1] <= 10)
-			|| (instr[i] == 8 && (instr[i + 1] == 5 || instr[i + 1] == 7))
-			|| (instr[i] == 9 && (instr[i + 1] == 6 || instr[i + 1] == 7))
+			|| (instr[i] == 8 && (instr[i + 1] == 5
+					|| instr[i + 1] == 7 || instr[i + 1] == 9))
+			|| (instr[i] == 9 && (instr[i + 1] >= 6 && instr[i + 1] <= 8))
 			|| (instr[i] == 10 && instr[i + 1] >= 5 && instr[i + 1] <= 7))
 			break ;
-	if (instr[i] == 3 || instr[i] == 4)
-		instr[i + 1] = 4;
-	else if (instr[i] == 6 || instr[i] == 7)
-		instr[i + 1] = 10;
-	else if (instr[i] == 9 || instr[i] == 10)
-		instr[i + 1] = 7;
 	if (instr[i] != -1)
-		i++;
+		change_opposite_instructs(i++, instr);
 	return (increment_and_fill(instr, i));
 }

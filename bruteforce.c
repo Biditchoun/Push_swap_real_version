@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/29 01:15:02 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/04 20:56:35 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	initialise_params(t_bf *params, t_stack **a, int amount)
 
 int	check_if_brutesorted(t_stack *a_cpy, int amount)
 {
-	int		max;
+	int	max;
 
 	max = -1;
 	while (amount-- && a_cpy)
@@ -57,8 +57,8 @@ int	check_if_brutesorted(t_stack *a_cpy, int amount)
 
 int	apply_instructs(t_stack **a, t_stack **b, t_bf params, int fd)
 {
-	int		(*f)(t_stack **, t_stack **, int);
-	int		i;
+	int	(*f)(t_stack **, t_stack **, int);
+	int	i;
 
 	i = -1;
 	while (params.instructs[++i] > -1)
@@ -109,13 +109,13 @@ int	bruteforce(t_stack **a, t_stack **b, int amount, int fd)
 		return (free_lists_rtint(a_cpy, b_cpy, 0));
 	while (params.instructs[BRUTEFORCE] < 0)
 	{
+		get_next_try(&params, a);
+		apply_instructs(&a_cpy, &b_cpy, params, 0);
 /*#include <stdio.h>
 int i = -1;
 while (params.instructs[++i] > -1)
 	printf("%i ", params.instructs[i]);
 printf("\n");*/
-		get_next_try(&params, a);
-		apply_instructs(&a_cpy, &b_cpy, params, 0);
 		if (check_if_brutesorted(a_cpy, params.amount_to_sort))
 			rt = apply_instructs(a, b, params, fd);
 		if (rt)

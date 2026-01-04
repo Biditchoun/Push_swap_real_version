@@ -16,6 +16,10 @@ COMPILER =	cc
 
 NAME =		push_swap
 
+ifndef BRUTEFORCE
+	BRUTEFORCE = 11
+endif
+
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
@@ -23,7 +27,7 @@ $(NAME): $(OBJECTS)
 	${COMPILER} ${FLAGS} ${OBJECTS} ${LIBFT_PATH}${LIBFT} -o ${NAME}
 
 $(OBJECTS): %.o:%.c push_swap.h
-	$(COMPILER) $(FLAGS) -g -c $< -o $@ -I ${LIBFT_PATH}
+	$(COMPILER) -D BRUTEFORCE=$(BRUTEFORCE) $(FLAGS) -g -c $< -o $@ -I ${LIBFT_PATH}
 
 clean: 
 	make clean -C ${LIBFT_DIR}

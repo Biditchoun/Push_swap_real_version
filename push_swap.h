@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/29 00:39:22 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/04 18:15:44 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "libft/libft.h"
 
 # ifndef BRUTEFORCE
-#  define BRUTEFORCE 12
+#  define BRUTEFORCE 11
 # endif
 
 # if BRUTEFORCE < 0
