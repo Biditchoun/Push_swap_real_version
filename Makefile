@@ -17,7 +17,7 @@ COMPILER =	cc
 NAME =		push_swap
 
 ifndef BRUTEFORCE
-	BRUTEFORCE = 13
+	BRUTEFORCE = 11
 endif
 
 all: $(NAME)

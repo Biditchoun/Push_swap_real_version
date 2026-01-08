@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/05 17:26:27 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/09 00:02:38 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ void	initialise_params(t_bf *params, t_stack **a, int amount)
 {
 	t_stack	*curr;
 
+	params->instructs[0] = 1;
+	params->instructs[1] = -1;
 	params->instructs[BRUTEFORCE] = -1;
-	params->instructs[0] = -1;
 	params->f_instructs[0] = &pa;
 	params->f_instructs[1] = &pb;
 	params->f_instructs[2] = &sa;
@@ -111,11 +112,11 @@ int	bruteforce(t_stack **a, t_stack **b, int amount, int fd)
 	{
 		get_next_try(&params, a);
 		apply_instructs(&a_cpy, &b_cpy, params, 0);
-#include <stdio.h>
+/*#include <stdio.h>
 int i = -1;
 while (params.instructs[++i] > -1)
 	printf("%i ", params.instructs[i]);
-printf("\n");
+printf("\n");*/
 		if (check_if_brutesorted(a_cpy, params.amount_to_sort))
 			rt = apply_instructs(a, b, params, fd);
 		if (rt)

@@ -2,7 +2,7 @@
 
 
 
-**Description**
+#Description
 
 The goal of this assignment is to sort a list of numbers.
 To do that, we are given several things : firstly, the list of numbers, which will be contained in a stack named *a*. Secondly, an empy *b* stack. Finally, a dozen of useable commands to be able to sort the list:
@@ -17,11 +17,13 @@ To do that, we are given several things : firstly, the list of numbers, which wi
 - *rra*: move the bottom number of *a* at its top (reverse rotate *a*);
 - *rrb*: move the bottom number of *b* at its top (reverse rotate *b*);
 - *rrr*: execute *rra* and *rrb*.
+
 Our output must be the commands needed to sort the list of numbers, each one being on a new line.
 
 
 
-**Instructions**
+
+#Instructions
 
 Run *make* in the project folder, and then execute the program with the list of numbers.
 You can also set an environment variable to your list of numbers.
@@ -41,34 +43,57 @@ unset BRUTEFORCE
 
 
 
-**Resources**
+
+#Resources
 
 I did not check out external resources specifically for this project, nor did I use AI.
-I did however try to use *make [number]* for the bruteforce specification, without succeeding, and ended up using an environmental variable.
 
 
 
-**How this shit works**
+
+#How this shit works
 
 Push\_swap is probably the first project I really like in this cursus. There was the piscine, now there is push\_swap.
 
-**Parsing**
+##Parsing
 
 The subject is not very clear on how the input is formatted: it could either be an array of strings containing each a number, or a string containing all the numbers separated by a space. As such, I decided to accept any number of strings containing any amount of numbers separated by any number of spaces as valid inputs. Any other character or any duplicate number will result to the giving out an error.
+
 The numbers are then stored into a chained list, where each node contains a link to the next and the previous node. The first node of the list has *prev* linking to the last node of the list, the last node of the list has *next* linking to NULL.
+
 Each number is converted to the index it should have if the list was sorted: if the list is 0 -5 18 4, it will be converted to 1 0 3 2.
 
-**Bruteforcing**
+##Bruteforcing
 
 One could wonder how the hell it would be possible to bruteforce sorting a list. It's actually pretty straightforward: try out all the command combinations until one works. For example, in a non-optimised bruteforce, you'd try *pa*, see the list is not sorted, then *pb*, then *sa*, [...], then *rrr*, then *pa pa*, *pa pb*, *pa sa*,... until a combination sorts the list.
-Originally, I was doing that by copying the original list, applying the commands the bruteforce comes with on it, checking if the list was sorted, and then deleting it. However, I figured it was less ressource-intensive to just undo the changes on the list by applying the opposing commands compared to the ones given by the bruteforce.
-There are several optimisations that I am doing to speed up the whole thing:
-- If there is any *pa* while *b* is empty, or if there are more *pb* than *pa* (meaning *b* wouldn't end up empty after applying the commands), respectively, the first *pa* is changed or a new *pa* is added behind the last *pb* (if not possible because of a lack of available commands, the last *pb* is changed);
-- If *b* contains less than two elements when encoutering *sb*, *ss*, *rb*, *rr*, *rrb* or *rrr*, the command is changed to the next command that is not listed right before;
-- If *b* contains exactly two elements when encountering *rb*, *rr*, *rrb* or *rrr*, the command is changed to the next command that is not listed right before: reasoning being that those will have the same effect as *sb* or *ss* ; as such, they are redundant and not need to be checked;
-- If there are two opposite instructions one after the other, the second one gets changed: for example, *pa pb*, *sb sb* or *ra rra* results to no change; *sa ss* or *rrr rb* can be shortened to, respectively, *sb* or *rra*;
-- If there are two instructions one after the other that can be shortened, the second one gets changed: for example, *sa sb* or *rb ra* can be shortened to, respectively, *ss* or *rr*;
 
-**Algorithms**
+Originally, I was doing that by copying the original list, applying the commands the bruteforce comes with on it, checking if the list was sorted, and then deleting it. However, I figured it was less ressource-intensive to just undo the changes on the list by applying the opposing commands compared to the ones given by the bruteforce.
+
+There are several optimisations that I am doing to speed up the whole thing:
+- 1. If there is any *pa* while *b* is empty, or if there are more *pb* than *pa* (meaning *b* wouldn't end up empty after applying the commands), respectively, the concerned *pa* is changed or a new *pa* is added behind the last *pb* (if not possible because of a lack of available commands, the last *pb* is changed).
+- 2. If *b* contains less than three elements when encountering *rb*, *rr*, *rrb* or *rrr*, the command is changed to the next command that is not listed right before: reasoning being that those will have the same effect as *sb* or *ss* ; as such, they are redundant and not need to be checked;
+- 3. If *b* contains less than two elements when encoutering *sb* or *ss*, the command is changed to the next command that is not listed right before;
+- 4. If there are two opposite instructions one after the other, the second one gets changed: for example, *pa pb*, *sb sb* or *ra rra* results to no change; *sa ss* or *rrr rb* can be shortened to, respectively, *sb* or *rra*. A version where, if there is nothing that moves the stack between two opposite instructions, the second one also gets changed : with that, *rrr rra sa rb* will not be valid since *rrr* and *rb* cancel eachother while *b* has not been modified;
+- 5. If there are two instructions one after the other that can be shortened, the second one gets changed: for example, *sa sb* or *rb ra* can be shortened to, respectively, *ss* or *rr*.
+
+EXAMPLE : we just tried out the valid commands combination *ra ra ra ra ra ra*. We will now try to get the next valid command line.
+Initial incrementation: *ra ra ra ra ra rb*
+Rule 2 => *ra ra ra ra ra rra*
+Rule 4 => *ra ra ra ra ra rrb*
+Rule 2 => *ra ra ra ra rb pa*
+Rule 2 => *ra ra ra ra rra pa*
+Rule 4 => *ra ra ra ra rrb pa*
+[...]
+Rule 2 => *rra pa pa pa pa pa*
+Rule 1 => *rra pb pa pa pa pa*
+Rule 4 => *rra pb pb pa pa pa*
+[...]
+Rule 4 => *rra pb pb pb pb pb*
+Rule 1 => *rra pb pb sa pa pa*
+And this is the next valid commands combination.
+We did not use rule 3 or 5 here, but I think it helps a lot giving a clear overview on how my bruteforcing works.
+
+
+##Algorithms
 
 There will be several implemented algorithms, and push\_swap will choose the best performing one. However, I am not there yet.

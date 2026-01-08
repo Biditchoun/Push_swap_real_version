@@ -6,98 +6,82 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 20:50:16 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/04 21:12:28 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/08 22:36:19 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	check_pushes(int *instructs)
+int	check_push(int *instructs, int i, int *b_size)
 {
-	int	b_size;
-	int	i;
+	if (instructs[i])
+		(*b_size)++;
+	else
+		(*b_size)--;
+	if ((instructs[i] == 0 && instructs[i + 1] == 1)
+		|| (instructs[i] == 1 && instructs[i + 1] == 0))
+		return (increment_and_fill(instructs, i + 1, *b_size));
+	return (0);
+}
 
-	b_size = 0;
-	i = -1;
-	while (instructs[++i] > -1)
-	{
-		if (instructs[i] == 0)
-			b_size--;
-		else if (instructs[i] == 1)
-			b_size++;
-		if (b_size < 0
-			|| (instructs[i] == 0 && instructs[i + 1] == 1)
-			|| (instructs[i] == 1 && instructs[i + 1] == 0))
-			break ;
-	}
-	if (b_size == 0 && instructs[i] == -1)
-		return (0);
-	if (instructs[i] != -1 && b_size >= 0)
+int	check_swap(int *instructs, int i, int b_size)
+{
+	int	b;
+
+	if (instructs[i] > 2 && b_size < 2)
+		return (increment_and_fill(instructs, i, b_size));
+	b = 0;
+	if (instructs[i] == 2)
+		b = 1;
+	i++;
+	while (instructs[i] != -1
+		&& (instructs[i] == 5 + b || instructs[i] == 8 + b))
 		i++;
-	if (instructs[i] == -1)
-		i--;
-	return (increment_and_fill(instructs, i));
+	if (instructs[i] >= 2 && instructs[i] <= 4)
+		return (increment_and_fill(instructs, i, b_size));
+	return (0);
 }
 
-int	check_b_instructs(int *instructs)
+int	check_rotate(int *instructs, int i, int b_size)
 {
-	int	i;
-	int	b_size;
+	int	b;
+	int	curr;
 
-	b_size = 0;
-	i = -1;
-	while (instructs[++i] > -1)
-	{
-		if (instructs[i] == 0)
-			b_size--;
-		else if (instructs[i] == 1)
-			b_size++;
-		else if ((b_size < 2 && instructs[i] != 2
-				&& instructs[i] != 5 && instructs[i] != 8)
-			|| (b_size == 2 && (instructs[i] == 6 || instructs[i] == 7
-					|| instructs[i] == 9 || instructs[i] == 10)))
-			break ;
-	}
-	if (instructs[i] > 8)
-		instructs[i] = 10;
-	else if (instructs[i] > 5)
-		instructs[i] = 7;
-	else if (instructs[i] > 2)
-		instructs[i] = 4;
-	return (increment_and_fill(instructs, i));
+	if (b_size < 3 && (instructs[i] == 6 || instructs[i] == 7))
+		return (increment_and_fill(instructs, i, b_size));
+	curr = instructs[i++];
+	b = 0;
+	if (curr == 5)
+		b = 1;
+	while (instructs[i] != -1
+		&& (instructs[i] == 2 + b || instructs[i] == 8 + b))
+		i++;
+	if ((curr == 7 && instructs[i] >= 8 && instructs[i] <= 10)
+		|| (curr == 6 && (instructs[i] == 5 || instructs[i] >= 9))
+		|| (curr == 5
+			&& (instructs[i] == 6 || instructs[i] == 8 || instructs[i] == 10)))
+		return (increment_and_fill(instructs, i, b_size));
+	return (0);
 }
 
-void	change_opposite_instructs(int i, int *instr)
+int	check_rrotate(int *instructs, int i, int b_size)
 {
-	if (instr[i] >= 2 && instr[i] <= 4)
-		instr[i + 1] = 4;
-	else if (instr[i] == 7 || (instr[i] == 6 && instr[i + 1] != 5))
-		instr[i + 1] = 10;
-	else if (instr[i] == 9)
-		instr[i + 1] = 8;
-	else if (instr[i] == 10)
-		instr[i + 1] = 7;
-}
+	int	b;
+	int	curr;
 
-int	check_opposite_instructs(int *instr)
-{
-	int	i;
-
-	i = -1;
-	while (instr[++i] > -1)
-		if (((instr[i] >= 2 && instr[i] <= 4)
-				&& (instr[i + 1] >= 2 && instr[i + 1] <= 4))
-			|| (instr[i] == 5 && (instr[i + 1] == 6
-					|| instr[i + 1] == 8 || instr[i + 1] == 10))
-			|| (instr[i] == 6 && (instr[i + 1] == 5
-					|| instr[i + 1] == 9 || instr[i + 1] == 10))
-			|| (instr[i] == 7 && instr[i + 1] >= 8 && instr[i + 1] <= 10)
-			|| (instr[i] == 8 && (instr[i + 1] == 5
-					|| instr[i + 1] == 7 || instr[i + 1] == 9))
-			|| (instr[i] == 9 && (instr[i + 1] >= 6 && instr[i + 1] <= 8))
-			|| (instr[i] == 10 && instr[i + 1] >= 5 && instr[i + 1] <= 7))
-			break ;
-	if (instr[i] != -1)
-		change_opposite_instructs(i++, instr);
-	return (increment_and_fill(instr, i));
+	if (b_size < 3 && instructs[i] >= 9)
+		return (increment_and_fill(instructs, i, b_size));
+	curr = instructs[i++];
+	b = 0;
+	if (curr == 8)
+		b = 1;
+	while (instructs[i] != -1
+		&& (instructs[i] == 2 + b || instructs[i] == 5 + b))
+		i++;
+	if ((curr == 10 && instructs[i] >= 5 && instructs[i] <= 7)
+		|| (curr == 9 && instructs[i] >= 6 && instructs[i] <= 8)
+		|| (curr == 8
+			&& (instructs[i] == 9 || instructs[i] == 5 || instructs[i] == 7)))
+		return (increment_and_fill(instructs, i, b_size));
+	return (0);
 }
