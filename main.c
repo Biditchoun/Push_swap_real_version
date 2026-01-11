@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/04 20:44:10 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/11 21:48:34 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,21 @@
 /*void	check_list(t_stack *a)
 {
 #include <stdio.h>
-	t_stack *cp;
+	t_stack *cp, *cp2;
 
 	if (!a)
 	{	printf("null list\n");
 		return ;
 	}
+	cp2 = a;
 	cp = a->next;
 	printf("Last : %i, list : %i ", a->prev->nb, a->nb);
-	while (cp)
+	while (cp != a)
 	{
-		if (cp->prev != a)
+		if (cp->prev != cp2)
 			printf("wrong prev\n");
 		printf("%i ", cp->nb);
-		a = a->next;
+		cp2 = cp2->next;
 		cp = cp->next;
 	}
 	printf("\n");
@@ -110,6 +111,6 @@ int	main(int ac, char **av)
 		return (rtint_free(-1, args));
 	free(args);
 	rt = do_the_magic(a, argssize);
-	free_lists_rtptr(*a, NULL, NULL);
+	rtptr_free_list(NULL, *a);
 	return (rt);
 }
