@@ -18,6 +18,7 @@ Secondly, an empy *b* stack. Finally, a dozen of useable commands to be able to 
 - *rra*: move the bottom number of *a* at its top (reverse rotate *a*) ;
 - *rrb*: move the bottom number of *b* at its top (reverse rotate *b*) ;
 - *rrr*: execute *rra* and *rrb*.\
+
 Our output must be the commands needed to sort the list of numbers, each one being on a new line.
 
 
@@ -65,12 +66,12 @@ As such, I decided to accept any number of strings containing any amount of numb
 Any other character or any duplicate number will result to the giving out an error.\
 The numbers are then stored into a chained list, where each node contains a link to the next and the previous node.
 The first node of the list has *prev* linking to the last node of the list, the last node of the list has *next* linking to NULL.\
-Each number is converted to the index it should have if the list was sorted: if the list is 0 -5 18 4, it will be converted to 1 0 3 2.
+Finally, each number is converted to the index it should have if the list was sorted: if the list is 0 -5 18 4, it will be converted to 1 0 3 2.
 
 ## Bruteforcing
 
 One could wonder how the hell it would be possible to bruteforce sorting a list.
-It's actually pretty straightforward: try out all the command combinations until one works.
+It's actually pretty straightforward : try out all the command combinations until one works.\
 For example, in a non-optimised bruteforce, you'd try *pa*, see the list is not sorted, then *pb*, then *sa*, [...],
 then *rrr*, then *pa pa*, *pa pb*, *pa sa*,... until a combination sorts the list.\
 Originally, I was doing that by copying the original list, applying the commands the bruteforce comes with on it,
@@ -78,26 +79,27 @@ checking if the list was sorted, and then deleting it.
 However, I figured it was less ressource-intensive to just undo the changes on the list
 by applying the opposing commands compared to the ones given by the bruteforce.
 
-There are several optimisations that I am doing to speed up the whole thing :\
-1. If there is any *pa* while *b* is empty, the encountered *pa* gets changed ;\
+There are several optimisations that I am doing to speed up the whole thing :
+1. If there is any *pa* while *b* is empty, the encountered *pa* gets changed ;
 2. If there are more *pb* than *pa*, a new *pa* is added right behinf the last *pb*
-(if not possible because of a lack of available commands, the last *pb* is changed) ;\
+(if not possible because of a lack of available commands, the last *pb* is changed) ;
 3. If *b* contains less than three elements when encountering *rb*, *rr*, *rrb* or *rrr*,
 the command is changed to the next command that is not listed right before :
 reasoning being that those will have the same effect as *sb* or *ss* ;
-as such, they are redundant and not need to be checked ;\
+as such, they are redundant and not need to be checked ;
 4. If *b* contains less than two elements when encoutering *sb* or *ss*,
-the command is changed to the next command that is not listed right before ;\
+the command is changed to the next command that is not listed right before ;
 5. If there are two opposite instructions one after the other, the second one gets changed :
 for example, *pa pb*, *sb sb* or *ra rra* results to no change ;
-*sa ss* or *rrr rb* can be shortened to, respectively, *sb* or *rra*.
+*sa ss* or *rrr rb* can be shortened to, respectively, *sb* or *rra*.\
 An evoluated version where, if there is nothing that moves the stack between two opposite instructions,
 the second one still gets changed, is implemanted :
-with that, *rrr rra sa rb* will not be valid since *rrr* and *rb* cancel eachother while *b* has not been modified ;\
+with that, *rrr rra sa rb* will not be valid since *rrr* and *rb* cancel eachother while *b* has not been modified ;
 6. If there are two instructions one after the other that can be shortened, the second one gets changed :
 for example, *sa sb* or *rb ra* can be shortened to, respectively, *ss* or *rr*.
 
-EXAMPLE : we just tried out the valid commands combination *ra ra ra ra ra ra*.\
+### EXAMPLE
+We just tried out the valid commands combination *ra ra ra ra ra ra*.\
 We will now try to get the next valid command line.\
 Initial incrementation: *ra ra ra ra ra rb*\
 Rule 3 => *ra ra ra ra ra rra*\

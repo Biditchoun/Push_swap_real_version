@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/11 21:49:02 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/11 23:16:43 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,29 +53,32 @@ int	check_if_brutesorted(t_stack *a, int amount)
 	return (1);
 }
 
-int	apply_instructs(t_stack **a, t_stack **b, t_bf params, int fd)
+int	apply_instructs(t_stack **a, t_stack **b, t_bf *params, int fd)
 {
 	int	(*f)(t_stack **, t_stack **, int);
 	int	i;
+	int	*instructs;
 
+	instructs = params->instructs;
 	i = -1;
-	while (params.instructs[++i] > -1)
+	while (instructs[++i] > -1)
 	{
-		f = params.f_instructs[params.instructs[i]];
+		f = params->f_instructs[instructs[i]];
 		f(a, b, fd);
 	}
 	return (i);
 }
 
-void	undo_changes(t_stack **a, t_stack **b,
-		int *instructs, void **f_instructs)
+void	undo_changes(t_stack **a, t_stack **b, t_bf *params)
 {
-	int	(*f)(t_stack **, t_stack **, int);
-	int	i;
+	void	**f_instructs;
+	int		(*f)(t_stack **, t_stack **, int);
+	int		*instructs;
+	int		i;
 
-	i = 0;
-	while (instructs[i] > -1)
-		i++;
+	f_instructs = params->f_instructs;
+	instructs = params->instructs;
+	i = params->instructs_size;
 	while (--i > -1)
 	{
 		if (instructs[i] == 0)
@@ -101,16 +104,16 @@ int	bruteforce(t_stack **a, t_stack **b, int amount, int fd)
 	while (params.instructs_size <= BRUTEFORCE)
 	{
 		get_next_try(&params, a);
-		apply_instructs(a, b, params, 0);
+		apply_instructs(a, b, &params, 0);
 /*#include <stdio.h>
 int i = -1;
 while (params.instructs[++i] > -1)
 	printf("%i ", params.instructs[i]);
 printf("\n");*/
 		rt = check_if_brutesorted(*a, params.amount_to_sort);
-		undo_changes(a, b, params.instructs, params.f_instructs);
+		undo_changes(a, b, &params);
 		if (rt)
-			rt = apply_instructs(a, b, params, fd);
+			rt = apply_instructs(a, b, &params, fd);
 		if (rt)
 			return (rt);
 	}

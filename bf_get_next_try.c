@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:14:34 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/11 22:23:16 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/11 23:31:34 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	invalid_pushes(t_bf *params, int i, int b_size)
 			b_instr, &params->instructs_size));
 }
 
-int	get_next_valid_instructs(t_bf *params)
+int	get_next_valid_instructs(t_bf *params, int *instructs)
 {
 	int	i;
 	int	rt;
@@ -62,18 +62,18 @@ int	get_next_valid_instructs(t_bf *params)
 	i = -1;
 	rt = 0;
 	b_size = 0;
-	while (params->instructs[++i] > -1 && !rt)
+	while (instructs[++i] > -1 && !rt)
 	{
-		if (params->instructs[i] <= 1)
-			rt = (check_push(params->instructs, i, &b_size, is));
-		else if (params->instructs[i] <= 4)
-			rt = (check_swap(params->instructs, i, b_size, is));
-		else if (params->instructs[i] <= 7)
-			rt = (check_rotate(params->instructs, i, b_size, is));
+		if (instructs[i] <= 1)
+			rt = (check_push(instructs, i, &b_size, is));
+		else if (instructs[i] <= 4)
+			rt = (check_swap(instructs, i, b_size, is));
+		else if (instructs[i] <= 7)
+			rt = (check_rotate(instructs, i, b_size, is));
 		else
-			rt = (check_rrotate(params->instructs, i, b_size, is));
+			rt = (check_rrotate(instructs, i, b_size, is));
 		if (b_size < 0 && !rt)
-			return (increment_and_fill(params->instructs, i, b_size, is));
+			return (increment_and_fill(instructs, i, b_size, is));
 	}
 	if (!rt && b_size)
 		return (invalid_pushes(params, i, b_size));
@@ -89,7 +89,7 @@ void	get_next_try(t_bf *params, t_stack **a)
 	i = 1;
 	while (i)
 	{
-		i = get_next_valid_instructs(params);
+		i = get_next_valid_instructs(params, params->instructs);
 		if (params->amount_to_sort < params->stack_size)
 			i = strict_checks(params, a, i);
 	}
