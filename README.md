@@ -17,7 +17,7 @@ Secondly, an empy *b* stack. Finally, a dozen of useable commands to be able to 
 - *rr*: execute *ra* and *rb* ;
 - *rra*: move the bottom number of *a* at its top (reverse rotate *a*) ;
 - *rrb*: move the bottom number of *b* at its top (reverse rotate *b*) ;
-- *rrr*: execute *rra* and *rrb*.\
+- *rrr*: execute *rra* and *rrb*.
 
 Our output must be the commands needed to sort the list of numbers, each one being on a new line.
 
@@ -92,13 +92,14 @@ the command is changed to the next command that is not listed right before ;
 5. If there are two opposite instructions one after the other, the second one gets changed :
 for example, *pa pb*, *sb sb* or *ra rra* results to no change ;
 *sa ss* or *rrr rb* can be shortened to, respectively, *sb* or *rra*.\
-An evoluated version where, if there is nothing that moves the stack between two opposite instructions,
-the second one still gets changed, is implemanted :
-with that, *rrr rra sa rb* will not be valid since *rrr* and *rb* cancel eachother while *b* has not been modified ;
+An evoluated version is implemented for swap instructions where,
+if there is nothing that moves the stack between two opposite instructions, the second one still gets changed :
+with that, *ss rra sa sb* will not be valid since *ss* and *sb* cancel eachother while *b* has not been modified.
+There used to be the same thing for the rotate and reverse rotate instructions,
+but the time gained with that rule was not compensated by the time spent checking if this rule could be followed ;
 6. If there are two instructions one after the other that can be shortened, the second one gets changed :
 for example, *sa sb* or *rb ra* can be shortened to, respectively, *ss* or *rr*.
-
-### EXAMPLE
+#### EXAMPLE
 We just tried out the valid commands combination *ra ra ra ra ra ra*.\
 We will now try to get the next valid command line.\
 Initial incrementation: *ra ra ra ra ra rb*\

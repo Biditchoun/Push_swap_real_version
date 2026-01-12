@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 20:50:16 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/11 21:45:07 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/12 21:25:17 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ int	check_swap(int *instructs, int i, int b_size, int *instructs_size)
 	int	b;
 
 	if (instructs[i] > 2 && b_size < 2)
+	{
+		instructs[i] = 4;
 		return (increment_and_fill(instructs, i, b_size, instructs_size));
+	}
 	b = 0;
 	if (instructs[i] == 2)
 		b = 1;
@@ -38,7 +41,10 @@ int	check_swap(int *instructs, int i, int b_size, int *instructs_size)
 		&& (instructs[i] == 5 + b || instructs[i] == 8 + b))
 		i++;
 	if (instructs[i] >= 2 && instructs[i] <= 4)
+	{
+		instructs[i] = 4;
 		return (increment_and_fill(instructs, i, b_size, instructs_size));
+	}
 	return (0);
 }
 
@@ -48,40 +54,51 @@ int	check_rotate(int *instructs, int i, int b_size, int *instructs_size)
 	int	curr;
 
 	if (b_size < 3 && (instructs[i] == 6 || instructs[i] == 7))
+	{
+		instructs[i] = 7;
 		return (increment_and_fill(instructs, i, b_size, instructs_size));
+	}
 	curr = instructs[i++];
 	b = 0;
 	if (curr == 5)
 		b = 1;
-	while (instructs[i] != -1
-		&& (instructs[i] == 2 + b || instructs[i] == 8 + b))
-		i++;
 	if ((curr == 7 && instructs[i] >= 8 && instructs[i] <= 10)
-		|| (curr == 6 && (instructs[i] == 5 || instructs[i] >= 9))
-		|| (curr == 5
+		|| (curr == 6 && instructs[i] >= 9))
+	{
+		instructs[i] = 10;
+		return (increment_and_fill(instructs, i, b_size, instructs_size));
+	}
+	if ((curr == 6 && instructs[i] == 5) || (curr == 5
 			&& (instructs[i] == 6 || instructs[i] == 8 || instructs[i] == 10)))
 		return (increment_and_fill(instructs, i, b_size, instructs_size));
 	return (0);
 }
 
-int	check_rrotate(int *instructs, int i, int b_size, int *instructs_size)
+int	check_rrotate(int *instr, int i, int b_size, int *instr_size)
 {
 	int	b;
 	int	curr;
 
-	if (b_size < 3 && instructs[i] >= 9)
-		return (increment_and_fill(instructs, i, b_size, instructs_size));
-	curr = instructs[i++];
+	if (b_size < 3 && instr[i] >= 9)
+	{
+		instr[i] = 10;
+		return (increment_and_fill(instr, i, b_size, instr_size));
+	}
+	curr = instr[i++];
 	b = 0;
 	if (curr == 8)
 		b = 1;
-	while (instructs[i] != -1
-		&& (instructs[i] == 2 + b || instructs[i] == 5 + b))
-		i++;
-	if ((curr == 10 && instructs[i] >= 5 && instructs[i] <= 7)
-		|| (curr == 9 && instructs[i] >= 6 && instructs[i] <= 8)
-		|| (curr == 8
-			&& (instructs[i] == 9 || instructs[i] == 5 || instructs[i] == 7)))
-		return (increment_and_fill(instructs, i, b_size, instructs_size));
+	if (curr == 10 && instr[i] >= 5 && instr[i] <= 7)
+	{
+		instr[i] = 7;
+		return (increment_and_fill(instr, i, b_size, instr_size));
+	}
+	if (curr == 9 && instr[i] >= 6 && instr[i] <= 8)
+	{
+		instr[i] = 8;
+		return (increment_and_fill(instr, i, b_size, instr_size));
+	}
+	if (curr == 8 && (instr[i] == 9 || instr[i] == 5 || instr[i] == 7))
+		return (increment_and_fill(instr, i, b_size, instr_size));
 	return (0);
 }

@@ -6,13 +6,13 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:12:46 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/28 22:48:31 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/12 20:18:58 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	rra(t_stack **a, t_stack **b, int fd)
+int	rra(t_stack **a, t_stack **b)
 {
 	(void)b;
 	if (!a || !*a || !(*a)->next)
@@ -20,12 +20,10 @@ int	rra(t_stack **a, t_stack **b, int fd)
 	(*a)->prev->next = *a;
 	(*a)->prev->prev->next = NULL;
 	*a = (*a)->prev;
-	if (fd)
-		write(1, "rra\n", 4);
 	return (1);
 }
 
-int	rrb(t_stack **a, t_stack **b, int fd)
+int	rrb(t_stack **a, t_stack **b)
 {
 	(void)a;
 	if (!b || !*b || !(*b)->next)
@@ -33,16 +31,12 @@ int	rrb(t_stack **a, t_stack **b, int fd)
 	(*b)->prev->next = *b;
 	(*b)->prev->prev->next = NULL;
 	*b = (*b)->prev;
-	if (fd)
-		write(1, "rrb\n", 4);
 	return (1);
 }
 
-int	rrr(t_stack **a, t_stack **b, int fd)
+int	rrr(t_stack **a, t_stack **b)
 {
-	rra(a, b, 0);
-	rrb(a, b, 0);
-	if (fd)
-		write(1, "rrr\n", 4);
+	rra(a, b);
+	rrb(a, b);
 	return (1);
 }

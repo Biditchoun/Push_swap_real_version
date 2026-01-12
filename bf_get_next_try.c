@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:14:34 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/11 23:31:34 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/12 21:31:46 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ int	increment_and_fill(int *instructs, int i, int b_size, int *instructs_size)
 
 int	invalid_pushes(t_bf *params, int i, int b_size)
 {
-	int	b_instr;
+	int	pb_instructs;
 
-	b_instr = 0;
-	while (i-- && --b_size - b_instr > 0)
+	pb_instructs = 0;
+	while (i-- && --b_size - pb_instructs > 0)
 		if (params->instructs[i] == 1)
-			b_instr++;
+			pb_instructs++;
 	return (increment_and_fill(params->instructs, i,
-			b_instr, &params->instructs_size));
+			pb_instructs, &params->instructs_size));
 }
 
 int	get_next_valid_instructs(t_bf *params, int *instructs)
@@ -82,15 +82,18 @@ int	get_next_valid_instructs(t_bf *params, int *instructs)
 
 void	get_next_try(t_bf *params, t_stack **a)
 {
-	int	i;
+	int	valid;
 
-	increment_and_fill(params->instructs, params->instructs_size - 1,
-		0, &params->instructs_size);
-	i = 1;
-	while (i)
+	if (params->instructs[params->instructs_size - 1] != 10)
+		params->instructs[params->instructs_size - 1]++;
+	else
+		increment_and_fill(params->instructs, params->instructs_size - 1,
+			0, &params->instructs_size);
+	valid = 1;
+	while (valid)
 	{
-		i = get_next_valid_instructs(params, params->instructs);
+		valid = get_next_valid_instructs(params, params->instructs);
 		if (params->amount_to_sort < params->stack_size)
-			i = strict_checks(params, a, i);
+			valid = strict_checks(params, a, valid);
 	}
 }

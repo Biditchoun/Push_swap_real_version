@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/11 22:11:59 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/12 20:52:10 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 # define PUSH_SWAP_H
 
 # include "libft/libft.h"
-
-# ifndef BRUTEFORCE
-#  define BRUTEFORCE 11
-# endif
 
 # if BRUTEFORCE < 0
 #  undef BRUTEFORCE
@@ -68,17 +64,18 @@ int		check_rotate(int *instructs, int i, int b_size, int *instructs_size);
 int		check_rrotate(int *instructs, int i, int b_size, int *instructs_size);
 int		strict_checks(t_bf *params, t_stack **a, int i);
 
-int		pa(t_stack **a, t_stack **b, int fd);
-int		pb(t_stack **a, t_stack **b, int fd);
-int		sa(t_stack **a, t_stack **b, int fd);
-int		sb(t_stack **a, t_stack **b, int fd);
-int		ss(t_stack **a, t_stack **b, int fd);
-int		ra(t_stack **a, t_stack **b, int fd);
-int		rb(t_stack **a, t_stack **b, int fd);
-int		rr(t_stack **a, t_stack **b, int fd);
-int		rra(t_stack **a, t_stack **b, int fd);
-int		rrb(t_stack **a, t_stack **b, int fd);
-int		rrr(t_stack **a, t_stack **b, int fd);
+void	print_instructs(int *instructs, int fd);
+int		pa(t_stack **a, t_stack **b);
+int		pb(t_stack **a, t_stack **b);
+int		sa(t_stack **a, t_stack **b);
+int		sb(t_stack **a, t_stack **b);
+int		ss(t_stack **a, t_stack **b);
+int		ra(t_stack **a, t_stack **b);
+int		rb(t_stack **a, t_stack **b);
+int		rr(t_stack **a, t_stack **b);
+int		rra(t_stack **a, t_stack **b);
+int		rrb(t_stack **a, t_stack **b);
+int		rrr(t_stack **a, t_stack **b);
 
 #endif
 /*

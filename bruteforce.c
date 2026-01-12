@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/11 23:16:43 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/12 21:25:30 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	check_if_brutesorted(t_stack *a, int amount)
 	return (1);
 }
 
-int	apply_instructs(t_stack **a, t_stack **b, t_bf *params, int fd)
+int	apply_instructs(t_stack **a, t_stack **b, t_bf *params)
 {
-	int	(*f)(t_stack **, t_stack **, int);
+	int	(*f)(t_stack **, t_stack **);
 	int	i;
 	int	*instructs;
 
@@ -64,7 +64,7 @@ int	apply_instructs(t_stack **a, t_stack **b, t_bf *params, int fd)
 	while (instructs[++i] > -1)
 	{
 		f = params->f_instructs[instructs[i]];
-		f(a, b, fd);
+		f(a, b);
 	}
 	return (i);
 }
@@ -72,7 +72,7 @@ int	apply_instructs(t_stack **a, t_stack **b, t_bf *params, int fd)
 void	undo_changes(t_stack **a, t_stack **b, t_bf *params)
 {
 	void	**f_instructs;
-	int		(*f)(t_stack **, t_stack **, int);
+	int		(*f)(t_stack **, t_stack **);
 	int		*instructs;
 	int		i;
 
@@ -89,9 +89,9 @@ void	undo_changes(t_stack **a, t_stack **b, t_bf *params)
 			f = f_instructs[instructs[i]];
 		else if (instructs[i] >= 5 && instructs[i] <= 7)
 			f = f_instructs[instructs[i] + 3];
-		else if (instructs[i] >= 8 && instructs[i] <= 10)
+		else
 			f = f_instructs[instructs[i] - 3];
-		f(a, b, 0);
+		f(a, b);
 	}
 }
 
@@ -104,7 +104,7 @@ int	bruteforce(t_stack **a, t_stack **b, int amount, int fd)
 	while (params.instructs_size <= BRUTEFORCE)
 	{
 		get_next_try(&params, a);
-		apply_instructs(a, b, &params, 0);
+		apply_instructs(a, b, &params);
 /*#include <stdio.h>
 int i = -1;
 while (params.instructs[++i] > -1)
@@ -113,9 +113,11 @@ printf("\n");*/
 		rt = check_if_brutesorted(*a, params.amount_to_sort);
 		undo_changes(a, b, &params);
 		if (rt)
-			rt = apply_instructs(a, b, &params, fd);
-		if (rt)
+		{
+			rt = apply_instructs(a, b, &params);
+			print_instructs(params.instructs, fd);
 			return (rt);
+		}
 	}
 	return (0);
 }

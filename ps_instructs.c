@@ -6,13 +6,13 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:57:30 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/28 22:47:50 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/12 20:45:56 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	pa(t_stack **a, t_stack **b, int fd)
+int	pa(t_stack **a, t_stack **b)
 {
 	t_stack	*node_to_move;
 
@@ -29,12 +29,10 @@ int	pa(t_stack **a, t_stack **b, int fd)
 		(*a)->prev = node_to_move;
 	node_to_move->next = *a;
 	*a = node_to_move;
-	if (fd)
-		write(1, "pa\n", 3);
 	return (1);
 }
 
-int	pb(t_stack **a, t_stack **b, int fd)
+int	pb(t_stack **a, t_stack **b)
 {
 	t_stack	*node_to_move;
 
@@ -51,12 +49,10 @@ int	pb(t_stack **a, t_stack **b, int fd)
 		(*b)->prev = node_to_move;
 	node_to_move->next = *b;
 	*b = node_to_move;
-	if (fd)
-		write(1, "pb\n", 3);
 	return (1);
 }
 
-int	sa(t_stack **a, t_stack **b, int fd)
+int	sa(t_stack **a, t_stack **b)
 {
 	int	buff;
 
@@ -66,12 +62,10 @@ int	sa(t_stack **a, t_stack **b, int fd)
 	buff = (*a)->nb;
 	(*a)->nb = (*a)->next->nb;
 	(*a)->next->nb = buff;
-	if (fd)
-		write(1, "sa\n", 3);
 	return (1);
 }
 
-int	sb(t_stack **a, t_stack **b, int fd)
+int	sb(t_stack **a, t_stack **b)
 {
 	int	buff;
 
@@ -81,16 +75,12 @@ int	sb(t_stack **a, t_stack **b, int fd)
 	buff = (*b)->nb;
 	(*b)->nb = (*b)->next->nb;
 	(*b)->next->nb = buff;
-	if (fd)
-		write(1, "sb\n", 3);
 	return (1);
 }
 
-int	ss(t_stack **a, t_stack **b, int fd)
+int	ss(t_stack **a, t_stack **b)
 {
-	sa(a, b, 0);
-	sb(a, b, 0);
-	if (fd)
-		write(1, "ss\n", 3);
+	sa(a, b);
+	sb(a, b);
 	return (1);
 }

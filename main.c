@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/11 21:48:34 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/12 21:32:17 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,24 @@ void	bubble_sort(int *a, int a_size)
 				a[j] = buff;
 			}
 		}
+	}
+}
+
+void	print_instructs(int *instructs, int fd)
+{
+	static char	*print[12] = {"pa\n", "pb\n", "sa\n", "sb\n",
+		"ss\n", "ra\n", "rb\n", "rr\n", "rra\n", "rrb\n", "rrr\n", NULL};
+	int			i;
+
+	if (!fd)
+		return ;
+	i = -1;
+	while (instructs[++i] > -1)
+	{
+		if (instructs[i] < 8)
+			write(1, print[instructs[i]], 3);
+		else
+			write(1, print[instructs[i]], 4);
 	}
 }
 
