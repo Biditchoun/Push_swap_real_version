@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/12 20:52:10 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/13 20:17:38 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_bruteforce
 	void	*f_instructs[12];
 	int		amount_to_sort;
 	int		stack_size;
+	int		smallest_index;
 }	t_bf;
 
 typedef struct s_algo
@@ -62,6 +63,7 @@ int		check_push(int *instructs, int i, int *b_size, int *instructs_size);
 int		check_swap(int *instructs, int i, int b_size, int *instructs_size);
 int		check_rotate(int *instructs, int i, int b_size, int *instructs_size);
 int		check_rrotate(int *instructs, int i, int b_size, int *instructs_size);
+int		check_smallest_index(int *instructs, int s_ind, int a_size, int b_size);
 int		strict_checks(t_bf *params, t_stack **a, int i);
 
 void	print_instructs(int *instructs, int fd);

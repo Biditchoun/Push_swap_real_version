@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:14:34 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/12 21:31:46 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/13 21:04:36 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,7 @@ void	get_next_try(t_bf *params, t_stack **a)
 		if (params->amount_to_sort < params->stack_size)
 			valid = strict_checks(params, a, valid);
 	}
+	if (check_smallest_index(params->instructs, params->smallest_index,
+			params->stack_size, 0))
+		get_next_try(params, a);
 }

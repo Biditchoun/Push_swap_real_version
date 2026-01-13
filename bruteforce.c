@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/12 21:25:30 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/13 20:28:22 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	initialise_params(t_bf *params, t_stack *a, int amount)
 	params->stack_size = 0;
 	while (a)
 	{
+		if (!a->nb)
+			params->smallest_index = params->stack_size + 1;
 		a = a->next;
 		params->stack_size++;
 	}

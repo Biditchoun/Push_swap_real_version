@@ -49,7 +49,8 @@ unset BRUTEFORCE
 
 # Resources
 
-I did not check out external resources specifically for this project, nor did I use AI.
+I did not check out external resources specifically for this project, nor did I use AI.\
+Yes, we are required by the subject to add a part that links the used resources.
 
 
 
@@ -117,6 +118,9 @@ Rule 5 => *rra pb pb pb pb pb*\
 Rule 2 => *rra pb pb sa pa pa*\
 And this is the next valid commands combination.\
 We did not use rule 4 or 6 here, but I think it helps a lot giving a clear overview on how my bruteforcing works.
+
+Finally, after checking if the commands combination is valid, I check if the smallest element of the numbers list
+gets placed at the top of the list with said combination, before checking if it sorts the whole list.
 
 ## Algorithms
 
