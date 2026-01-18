@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:14:34 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/13 21:04:36 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/18 23:21:30 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int	invalid_pushes(t_bf *params, int i, int b_size)
 	int	pb_instructs;
 
 	pb_instructs = 0;
-	while (i-- && --b_size - pb_instructs > 0)
-		if (params->instructs[i] == 1)
+	while (--b_size - pb_instructs > 0)
+		if (params->instructs[--i] == 1)
 			pb_instructs++;
-	return (increment_and_fill(params->instructs, i,
+	return (increment_and_fill(params->instructs, --i,
 			pb_instructs, &params->instructs_size));
 }
 
@@ -80,7 +80,7 @@ int	get_next_valid_instructs(t_bf *params, int *instructs)
 	return (rt);
 }
 
-void	get_next_try(t_bf *params, t_stack **a)
+void	get_next_try(t_bf *params)
 {
 	int	valid;
 
@@ -94,9 +94,6 @@ void	get_next_try(t_bf *params, t_stack **a)
 	{
 		valid = get_next_valid_instructs(params, params->instructs);
 		if (params->amount_to_sort < params->stack_size)
-			valid = strict_checks(params, a, valid);
+			valid = strict_checks(params, valid);
 	}
-	if (check_smallest_index(params->instructs, params->smallest_index,
-			params->stack_size, 0))
-		get_next_try(params, a);
 }

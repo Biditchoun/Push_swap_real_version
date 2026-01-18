@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/13 20:17:38 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/18 23:14:13 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ t_stack	*copy_list(t_stack *a);
 void	*rtptr_free_list(void *rt, t_stack *a);
 int		rtint_free_list(int rt, t_stack *a);
 
-int		bruteforce(t_stack **a, t_stack **b, int amount, int fd);
-void	get_next_try(t_bf *params, t_stack **a);
+int		*bruteforce(t_stack **a, t_stack **b, int amount);
+void	get_next_try(t_bf *params);
 int		increment_and_fill(int *instructs, int incr,
 			int b_size, int *instructs_size);
 int		check_push(int *instructs, int i, int *b_size, int *instructs_size);
@@ -64,9 +64,8 @@ int		check_swap(int *instructs, int i, int b_size, int *instructs_size);
 int		check_rotate(int *instructs, int i, int b_size, int *instructs_size);
 int		check_rrotate(int *instructs, int i, int b_size, int *instructs_size);
 int		check_smallest_index(int *instructs, int s_ind, int a_size, int b_size);
-int		strict_checks(t_bf *params, t_stack **a, int i);
+int		strict_checks(t_bf *params, int rt);
 
-void	print_instructs(int *instructs, int fd);
 int		pa(t_stack **a, t_stack **b);
 int		pb(t_stack **a, t_stack **b);
 int		sa(t_stack **a, t_stack **b);

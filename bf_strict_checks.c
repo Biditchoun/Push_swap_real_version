@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 21:26:36 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/13 21:01:26 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/19 00:27:38 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,68 @@ int	check_smallest_index(int *instrs, int s_id, int a_size, int b_size)
 	return (s_id - 1);
 }
 
-int	strict_checks(t_bf *params, t_stack **a, int i)
+int	invalid_ra_count(t_bf *params, int i, int ra_count)
 {
-	(void)params;
-	(void)a;
-	return (i);
+	while (ra_count-- > 0)
+	{
+		if (params->instructs[--i] <= 4 || params->instructs[i] == 6)
+			params->instructs[i] = 7;
+		else if (params->instructs[i] == 7)
+			ra_count--;
+		else if (params->instructs[i] == 8 || params->instructs[i] == 10)
+			ra_count++;
+		else if (params->instructs[i] == 5 && ra_count--)
+			params->instructs[i] = 7;
+	}
+	return (increment_and_fill(params->instructs, i,
+			0, &params->instructs_size));
+}
+
+int	invalid_rb_count(t_bf *params, int i, int ra_count, int rb_count)
+{
+	if (ra_count)
+		return (invalid_ra_count(params, i, ra_count));
+	while (rb_count-- > 0)
+	{
+		if (params->instructs[--i] <= 5)
+			params->instructs[i] = 8;
+		else if (params->instructs[i] <= 7)
+		{
+			params->instructs[i] = 7;
+			if (rb_count--)
+				params->instructs[i]++;
+		}
+		else if (params->instructs[i] >= 9)
+			rb_count++;
+	}
+	return (increment_and_fill(params->instructs, i,
+			0, &params->instructs_size));
+}
+
+int	strict_checks(t_bf *params, int rt)
+{
+	int	ra_count;
+	int	rb_count;
+	int	i;
+
+	ra_count = 0;
+	rb_count = 0;
+	i = -1;
+	while (params->instructs[++i] > -1)
+	{
+		if (params->instructs[i] == 5 || params->instructs[i] == 7)
+			ra_count++;
+		if (params->instructs[i] == 6 || params->instructs[i] == 7)
+			rb_count++;
+		if (params->instructs[i] == 8 || params->instructs[i] == 10)
+			ra_count--;
+		if (params->instructs[i] == 9 || params->instructs[i] == 10)
+			rb_count--;
+		if (ra_count < 0 || rb_count < 0)
+			return (increment_and_fill(params->instructs, i,
+					0, &params->instructs_size));
+	}
+	if (ra_count || rb_count)
+		rt = invalid_rb_count(params, i, ra_count, rb_count);
+	return (rt);
 }

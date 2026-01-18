@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/13 20:28:22 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/19 00:30:14 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,16 @@ int	check_if_brutesorted(t_stack *a, int amount)
 	return (1);
 }
 
-int	apply_instructs(t_stack **a, t_stack **b, t_bf *params)
+int	apply_instructs(t_stack **a, t_stack **b,
+		int *instructs, void **f_instructs)
 {
 	int	(*f)(t_stack **, t_stack **);
 	int	i;
-	int	*instructs;
 
-	instructs = params->instructs;
 	i = -1;
 	while (instructs[++i] > -1)
 	{
-		f = params->f_instructs[instructs[i]];
+		f = f_instructs[instructs[i]];
 		f(a, b);
 	}
 	return (i);
@@ -97,7 +96,7 @@ void	undo_changes(t_stack **a, t_stack **b, t_bf *params)
 	}
 }
 
-int	bruteforce(t_stack **a, t_stack **b, int amount, int fd)
+int	*bruteforce(t_stack **a, t_stack **b, int amount)
 {
 	t_bf	params;
 	int		rt;
@@ -105,21 +104,17 @@ int	bruteforce(t_stack **a, t_stack **b, int amount, int fd)
 	initialise_params(&params, *a, amount);
 	while (params.instructs_size <= BRUTEFORCE)
 	{
-		get_next_try(&params, a);
-		apply_instructs(a, b, &params);
-/*#include <stdio.h>
-int i = -1;
-while (params.instructs[++i] > -1)
-	printf("%i ", params.instructs[i]);
-printf("\n");*/
+		get_next_try(&params);
+		while (check_smallest_index(params.instructs, params.smallest_index,
+				params.stack_size, 0))
+			get_next_try(&params);
+		apply_instructs(a, b, params.instructs, params.f_instructs);
 		rt = check_if_brutesorted(*a, params.amount_to_sort);
 		undo_changes(a, b, &params);
+//		if (rt)
+//			apply_instructs(a, b, params.instructs, params.f_instructs);
 		if (rt)
-		{
-			rt = apply_instructs(a, b, &params);
-			print_instructs(params.instructs, fd);
-			return (rt);
-		}
+			return (arr_dup(params.instructs, params.instructs_size + 1));
 	}
-	return (0);
+	return (NULL);
 }

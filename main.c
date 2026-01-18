@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/12 21:32:17 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/19 00:29:11 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 	cp2 = a;
 	cp = a->next;
 	printf("Last : %i, list : %i ", a->prev->nb, a->nb);
-	while (cp != a)
+	while (cp && cp != a)
 	{
 		if (cp->prev != cp2)
 			printf("wrong prev\n");
@@ -57,14 +57,12 @@ void	bubble_sort(int *a, int a_size)
 	}
 }
 
-void	print_instructs(int *instructs, int fd)
+int	print_instructs(int *instructs)
 {
 	static char	*print[12] = {"pa\n", "pb\n", "sa\n", "sb\n",
 		"ss\n", "ra\n", "rb\n", "rr\n", "rra\n", "rrb\n", "rrr\n", NULL};
 	int			i;
 
-	if (!fd)
-		return ;
 	i = -1;
 	while (instructs[++i] > -1)
 	{
@@ -73,6 +71,8 @@ void	print_instructs(int *instructs, int fd)
 		else
 			write(1, print[instructs[i]], 4);
 	}
+	free(instructs);
+	return (0);
 }
 
 t_stack	*set_up_list(int *args, int argssize)
@@ -94,10 +94,13 @@ int	do_the_magic(t_stack **a, int argssize)
 {
 	t_stack	*b[1];
 	t_algo	info;
+	int		*instructs;
 
 	*b = NULL;
-	if (bruteforce(a, b, INT_MAX, 1))
-		return (0);
+	instructs = bruteforce(a, b, 5);
+//	check_list(*a);
+	if (instructs)
+		return (print_instructs(instructs));
 	(void)argssize;
 	info.min_moves = INT_MAX;
 	info.algo_nb = 1;

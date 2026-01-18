@@ -87,7 +87,12 @@ There are several optimisations that I am doing to speed up the whole thing :
 3. If *b* contains less than three elements when encountering *rb*, *rr*, *rrb* or *rrr*,
 the command is changed to the next command that is not listed right before :
 reasoning being that those will have the same effect as *sb* or *ss* ;
-as such, they are redundant and not need to be checked ;
+as such, they are redundant and not need to be checked.\
+In rare cases, an *rr* or *rrr* with only two elements in *b* could be needed for the least amount of instructions posible,
+however the performance gain when ignoring those cases is tremendous for 12 commands or less (65% less time used).
+Since this bruteforce is not destined for more than that, I concluded the performance gain was more enticing
+compared to the rigour : I might make it work with one less instruction in very rare cases,
+but the peer evaluating me would also be way more likely to inflict a *time out* flag ;
 4. If *b* contains less than two elements when encoutering *sb* or *ss*,
 the command is changed to the next command that is not listed right before ;
 5. If there are two opposite instructions one after the other, the second one gets changed :
