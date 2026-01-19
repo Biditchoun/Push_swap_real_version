@@ -6,38 +6,38 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/19 00:30:14 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/19 23:02:25 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	initialise_params(t_bf *params, t_stack *a, int amount)
+void	initialise_params(t_bf *params, t_stack *a, t_stack *b)
 {
 	params->instructs[0] = 1;
 	params->instructs[1] = -1;
 	params->instructs_size = 1;
-	params->f_instructs[0] = &pa;
-	params->f_instructs[1] = &pb;
-	params->f_instructs[2] = &sa;
-	params->f_instructs[3] = &sb;
-	params->f_instructs[4] = &ss;
-	params->f_instructs[5] = &ra;
-	params->f_instructs[6] = &rb;
-	params->f_instructs[7] = &rr;
-	params->f_instructs[8] = &rra;
-	params->f_instructs[9] = &rrb;
-	params->f_instructs[10] = &rrr;
-	params->f_instructs[11] = NULL;
-	params->stack_size = 0;
+	params->smallest_nb = INT_MAX;
+	params->a_size = 0;
 	while (a)
 	{
-		if (!a->nb)
-			params->smallest_index = params->stack_size + 1;
+		if (a->nb < params->smallest_nb && params->a_size < params->a_amount)
+			params->smallest_index = params->a_size + 1;
+		if (params->a_size++ < params->a_amount && a->nb < params->smallest_nb)
+			params->smallest_nb = a->nb;
 		a = a->next;
-		params->stack_size++;
 	}
-	params->amount_to_sort = min(amount, params->stack_size);
+	params->b_size = 0;
+	while (b)
+	{
+		if (b->nb < params->smallest_nb && params->b_size < params->b_amount)
+			params->smallest_index = -params->b_size - 1;
+		if (params->b_size++ < params->b_amount && b->nb < params->smallest_nb)
+			params->smallest_nb = b->nb;
+		b = b->next;
+	}
+	params->amount_to_sort = min(params->a_amount, params->a_size)
+		+ min(params->b_amount, params->b_size);
 }
 
 int	check_if_brutesorted(t_stack *a, int amount)
@@ -96,23 +96,31 @@ void	undo_changes(t_stack **a, t_stack **b, t_bf *params)
 	}
 }
 
-int	*bruteforce(t_stack **a, t_stack **b, int amount)
+int	*bruteforce(t_stack **a, t_stack **b, int a_amount, int b_amount)
 {
-	t_bf	params;
-	int		rt;
+	t_bf		params;
+	static void	*f_instructs[12] = {&pa, &pb, &sa, &sb, &ss,
+		&ra, &rb, &rr, &rra, &rrb, &rrr, NULL};
+	int			rt;
 
-	initialise_params(&params, *a, amount);
+	params.a_amount = a_amount;
+	params.b_amount = b_amount;
+	params.f_instructs = f_instructs;
+	initialise_params(&params, *a, *b);
 	while (params.instructs_size <= BRUTEFORCE)
 	{
 		get_next_try(&params);
 		while (check_smallest_index(params.instructs, params.smallest_index,
-				params.stack_size, 0))
+				params.a_size, params.b_size))
 			get_next_try(&params);
+/*#include <stdio.h>
+int i = -1;
+while (params.instructs[++i] > -1)
+	printf("%i ", params.instructs[i]);
+printf("\n");*/
 		apply_instructs(a, b, params.instructs, params.f_instructs);
 		rt = check_if_brutesorted(*a, params.amount_to_sort);
 		undo_changes(a, b, &params);
-//		if (rt)
-//			apply_instructs(a, b, params.instructs, params.f_instructs);
 		if (rt)
 			return (arr_dup(params.instructs, params.instructs_size + 1));
 	}

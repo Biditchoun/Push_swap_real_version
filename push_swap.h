@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/18 23:14:13 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/19 22:58:47 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include "libft/libft.h"
 
-# if BRUTEFORCE < 0
+# if BRUTEFORCE < 11
 #  undef BRUTEFORCE
-#  define BRUTEFORCE 0
+#  define BRUTEFORCE 11
 # endif
 
 typedef struct s_stack
@@ -31,9 +31,13 @@ typedef struct s_bruteforce
 {
 	int		instructs[BRUTEFORCE + 2];
 	int		instructs_size;
-	void	*f_instructs[12];
+	void	**f_instructs;
+	int		a_size;
+	int		b_size;
+	int		a_amount;
+	int		b_amount;
 	int		amount_to_sort;
-	int		stack_size;
+	int		smallest_nb;
 	int		smallest_index;
 }	t_bf;
 
@@ -55,16 +59,15 @@ t_stack	*copy_list(t_stack *a);
 void	*rtptr_free_list(void *rt, t_stack *a);
 int		rtint_free_list(int rt, t_stack *a);
 
-int		*bruteforce(t_stack **a, t_stack **b, int amount);
+int		*bruteforce(t_stack **a, t_stack **b, int a_amount, int b_amount);
 void	get_next_try(t_bf *params);
-int		increment_and_fill(int *instructs, int incr,
-			int b_size, int *instructs_size);
-int		check_push(int *instructs, int i, int *b_size, int *instructs_size);
-int		check_swap(int *instructs, int i, int b_size, int *instructs_size);
-int		check_rotate(int *instructs, int i, int b_size, int *instructs_size);
-int		check_rrotate(int *instructs, int i, int b_size, int *instructs_size);
-int		check_smallest_index(int *instructs, int s_ind, int a_size, int b_size);
+int		increment_and_fill(t_bf *params, int i, int b_size);
+int		check_push(t_bf *params, int i, int *a_size, int *b_size);
+int		check_swap(t_bf *params, int i, int a_size, int b_size);
+int		check_rotate(t_bf *params, int i, int a_size, int b_size);
+int		check_rrotate(t_bf *params, int i, int a_size, int b_size);
 int		strict_checks(t_bf *params, int rt);
+int		check_smallest_index(int *instructs, int s_ind, int a_size, int b_size);
 
 int		pa(t_stack **a, t_stack **b);
 int		pb(t_stack **a, t_stack **b);
@@ -79,6 +82,5 @@ int		rrb(t_stack **a, t_stack **b);
 int		rrr(t_stack **a, t_stack **b);
 
 #endif
-/*
-void    check_list(t_stack *a);
-*/
+
+void	check_list(t_stack *a);

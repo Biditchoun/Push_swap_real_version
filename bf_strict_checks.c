@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 21:26:36 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/19 00:27:38 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/19 21:26:17 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,12 @@ int	invalid_ra_count(t_bf *params, int i, int ra_count)
 		else if (params->instructs[i] == 5 && ra_count--)
 			params->instructs[i] = 7;
 	}
-	return (increment_and_fill(params->instructs, i,
-			0, &params->instructs_size));
+	return (increment_and_fill(params, i, 0));
 }
 
 int	invalid_rb_count(t_bf *params, int i, int ra_count, int rb_count)
 {
-	if (ra_count)
+	if (ra_count && params->a_amount < params->a_size)
 		return (invalid_ra_count(params, i, ra_count));
 	while (rb_count-- > 0)
 	{
@@ -101,8 +100,7 @@ int	invalid_rb_count(t_bf *params, int i, int ra_count, int rb_count)
 		else if (params->instructs[i] >= 9)
 			rb_count++;
 	}
-	return (increment_and_fill(params->instructs, i,
-			0, &params->instructs_size));
+	return (increment_and_fill(params, i, 0));
 }
 
 int	strict_checks(t_bf *params, int rt)
@@ -124,11 +122,12 @@ int	strict_checks(t_bf *params, int rt)
 			ra_count--;
 		if (params->instructs[i] == 9 || params->instructs[i] == 10)
 			rb_count--;
-		if (ra_count < 0 || rb_count < 0)
-			return (increment_and_fill(params->instructs, i,
-					0, &params->instructs_size));
+		if ((ra_count < 0 && params->a_amount < params->a_size)
+			|| (rb_count < 0 && params->b_amount < params->b_size))
+			return (increment_and_fill(params, i, 0));
 	}
-	if (ra_count || rb_count)
+	if ((ra_count && params->a_amount < params->a_size)
+		|| (rb_count && params->b_amount < params->b_size))
 		rt = invalid_rb_count(params, i, ra_count, rb_count);
 	return (rt);
 }
