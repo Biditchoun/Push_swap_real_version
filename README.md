@@ -122,6 +122,15 @@ We did not use rule 4 or 6 here, but I think it helps a lot giving a clear overv
 Finally, after checking if the commands combination is valid, I check if the smallest element of the numbers list
 gets placed at the top of the list with said combination, before checking if it sorts the whole list.
 
-## Algorithms
 
-There will be several implemented algorithms, and push\_swap will choose the best performing one. However, I am not there yet.
+Additionnally to all that, I made the call to bruteforce malleable : for example,
+I can ask it to take the three first numbers of *a* and the four first numbers of *b*,
+and my bruteforce will sort them in *a*.\
+This allows the bruteforce to be used in algorithms, which will be useful later on.
+
+## Algorithms
+###push\_and\_brute
+
+This cannot be called a proper algorithm. However, it is still implemented.\
+How it works is extremely simple : I am just pushing the top numbers (until 5) to *b* before calling the bruteforce.\
+Do not expect this to find a solution very often, but when it does, it will be very satisfying and filled with ss, rr and rrr.

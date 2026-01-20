@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/19 22:58:47 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/20 20:34:51 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include "libft/libft.h"
 
-# if BRUTEFORCE < 11
+# if BRUTEFORCE < 10
 #  undef BRUTEFORCE
-#  define BRUTEFORCE 11
+#  define BRUTEFORCE 10
 # endif
 
 typedef struct s_stack
@@ -59,6 +59,7 @@ t_stack	*copy_list(t_stack *a);
 void	*rtptr_free_list(void *rt, t_stack *a);
 int		rtint_free_list(int rt, t_stack *a);
 
+int		*push_and_brute(t_stack **a, t_stack **b, int pb_amount);
 int		*bruteforce(t_stack **a, t_stack **b, int a_amount, int b_amount);
 void	get_next_try(t_bf *params);
 int		increment_and_fill(t_bf *params, int i, int b_size);

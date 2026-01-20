@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/19 23:09:20 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/20 20:15:52 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,9 @@ int	do_the_magic(t_stack **a, int argssize)
 	int		*instructs;
 
 	*b = NULL;
-	pb(a, b);
-	pb(a, b);
-	pb(a, b);
-	instructs = bruteforce(a, b, INT_MAX, 2);
-	pa(a, b);
-	pa(a, b);
-	pa(a, b);
-//	check_list(*a);
+	instructs = bruteforce(a, b, INT_MAX, 0);
+	if (!instructs)
+		instructs = push_and_brute(a, b, 0);
 	if (instructs)
 		return (print_instructs(instructs));
 	(void)argssize;

@@ -4,20 +4,19 @@ LIBFT_DIR =	libft
 
 LIBFT_PATH = ${LIBFT_DIR}/
 
-SOURCES =	main.c handle_input.c setup_list.c\
-			ps_instructs.c r_instructs.c rr_instructs.c\
-			bruteforce.c bf_get_next_try.c bf_basic_checks.c bf_strict_checks.c
+SOURCES =	main.c m_handle_input.c m_setup_list.c instructs_ps.c instructs_r.c instructs_rr.c\
+			bruteforce.c bf_get_next_try.c bf_basic_checks.c bf_strict_checks.c bf_push_and_brute.c
 
 OBJECTS =	$(SOURCES:.c=.o)
 
-FLAGS =		-Wall -Werror -Wextra
+FLAGS =		-Wall -Werror -Wextra #-Ofast
 
 COMPILER =	cc
 
 NAME =		push_swap
 
 ifndef BRUTEFORCE
-	BRUTEFORCE = 11
+	BRUTEFORCE = 10
 endif
 
 all: $(NAME)
