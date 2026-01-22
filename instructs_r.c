@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   r_instructs.c                                      :+:      :+:    :+:   */
+/*   instructs_r.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:12:46 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/12 20:19:17 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/22 19:59:51 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ra(t_stack **a, t_stack **b)
 	*a = (*a)->next;
 	(*a)->prev->next = NULL;
 	(*a)->prev->prev->next = (*a)->prev;
-	return (1);
+	return (5);
 }
 
 int	rb(t_stack **a, t_stack **b)
@@ -31,12 +31,12 @@ int	rb(t_stack **a, t_stack **b)
 	*b = (*b)->next;
 	(*b)->prev->next = NULL;
 	(*b)->prev->prev->next = (*b)->prev;
-	return (1);
+	return (6);
 }
 
 int	rr(t_stack **a, t_stack **b)
 {
 	ra(a, b);
 	rb(a, b);
-	return (1);
+	return (7);
 }

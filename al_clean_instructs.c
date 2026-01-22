@@ -1,42 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   instructs_rr.c                                     :+:      :+:    :+:   */
+/*   al_work_on_instructs.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/12 19:12:46 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/22 20:00:05 by sawijnbe         ###   ########.fr       */
+/*   Created: 2026/01/22 19:48:11 by sawijnbe          #+#    #+#             */
+/*   Updated: 2026/01/22 19:50:09 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	rra(t_stack **a, t_stack **b)
+int	*clean_instructs(int *instructs)
 {
-	(void)b;
-	if (!a || !*a || !(*a)->next)
-		return (0);
-	(*a)->prev->next = *a;
-	(*a)->prev->prev->next = NULL;
-	*a = (*a)->prev;
-	return (8);
-}
-
-int	rrb(t_stack **a, t_stack **b)
-{
-	(void)a;
-	if (!b || !*b || !(*b)->next)
-		return (0);
-	(*b)->prev->next = *b;
-	(*b)->prev->prev->next = NULL;
-	*b = (*b)->prev;
-	return (9);
-}
-
-int	rrr(t_stack **a, t_stack **b)
-{
-	rra(a, b);
-	rrb(a, b);
-	return (10);
+	return (instructs);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ps_instructs.c                                     :+:      :+:    :+:   */
+/*   instructs_ps.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:57:30 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/12 20:45:56 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/22 19:59:33 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	pa(t_stack **a, t_stack **b)
 	t_stack	*node_to_move;
 
 	if (!b || !*b)
-		return (0);
+		return (-1);
 	node_to_move = *b;
 	*b = (*b)->next;
 	if (*b)
@@ -29,7 +29,7 @@ int	pa(t_stack **a, t_stack **b)
 		(*a)->prev = node_to_move;
 	node_to_move->next = *a;
 	*a = node_to_move;
-	return (1);
+	return (0);
 }
 
 int	pb(t_stack **a, t_stack **b)
@@ -62,7 +62,7 @@ int	sa(t_stack **a, t_stack **b)
 	buff = (*a)->nb;
 	(*a)->nb = (*a)->next->nb;
 	(*a)->next->nb = buff;
-	return (1);
+	return (2);
 }
 
 int	sb(t_stack **a, t_stack **b)
@@ -75,12 +75,12 @@ int	sb(t_stack **a, t_stack **b)
 	buff = (*b)->nb;
 	(*b)->nb = (*b)->next->nb;
 	(*b)->next->nb = buff;
-	return (1);
+	return (3);
 }
 
 int	ss(t_stack **a, t_stack **b)
 {
 	sa(a, b);
 	sb(a, b);
-	return (1);
+	return (4);
 }

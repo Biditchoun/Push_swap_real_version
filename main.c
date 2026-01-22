@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/20 20:15:52 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/22 20:58:58 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,23 +92,31 @@ t_stack	*set_up_list(int *args, int argssize)
 
 int	do_the_magic(t_stack **a, int argssize)
 {
-	t_stack	*b[1];
-	t_algo	info;
-	int		*instructs;
+	t_stack		*b[1];
+	t_algo		info;
+	static void	*algos_list[2] = {&brute_chunks, NULL};
+	int			i;
 
 	*b = NULL;
-	instructs = bruteforce(a, b, INT_MAX, 0);
-	if (!instructs)
-		instructs = push_and_brute(a, b, 0);
-	if (instructs)
-		return (print_instructs(instructs));
-	(void)argssize;
+	info.instructs = brute_push_and_brute(a, b);
+	if (info.instructs)
+		return (print_instructs(info.instructs));
 	info.min_moves = INT_MAX;
-	info.algo_nb = 1;
-/*	chunck_sorts(&info, &a, &b, argssize);
-	{insert other sorting algorithms}
-	{execute best performing algorithm, indicated in info}*/
-	return (0);
+	i = -1;
+	while (algos_list[++i])
+	{
+		info.f = algos_list[i];
+		info.curr_instructs = f(a, b, info, argssize);
+		if (info.min_moves > info.curr_moves)
+		{
+			info.min_moves = info.curr_moves;
+			free(info.instructs);
+			info.instructs = info.curr_instructs;
+		}
+		else
+			free(info.curr_instructs);
+	}
+	return (print_instructs(info.instructs));
 }
 
 int	main(int ac, char **av)

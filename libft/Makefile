@@ -1,6 +1,6 @@
 SOURCES = str_len.c mem_set.c mem_cpy.c mem_move.c str_cpy.c strl_cpy.c\
 		str_chr.c strn_cmp.c strn_str.c str_dup.c split.c\
-		int_chr.c check_if_int.c arr_dup.c print_arr.c\
+		arr_len.c int_chr.c check_if_int.c arr_dup.c print_arr.c\
 		a_toi.c a_tol.c i_toa.c min.c max.c putnbr_base.c putunbr_base.c\
 		ft_printf.c printf_conversions1.c printf_conversions2.c\
 		rtint_free.c rtptr_free.c write_rtint.c write_rtptr.c

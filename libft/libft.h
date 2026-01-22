@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2025/12/04 15:05:37 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/22 19:52:05 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@ int		putunbr_base(unsigned long nbr, char *base, int fd);
 
 //		Handle arrays
 
+int		arr_len(int *arr, int end);
 int		int_chr(const int *arr, int n, int arrsize);
 int		*arr_dup(int *arr, int size);
-void	print_arr(int *arr, int arrsize);
+void	print_arr(int *arr, int arrsize, int end);
 
 //		Handle frees / errors
 

@@ -5,7 +5,8 @@ LIBFT_DIR =	libft
 LIBFT_PATH = ${LIBFT_DIR}/
 
 SOURCES =	main.c m_handle_input.c m_setup_list.c instructs_ps.c instructs_r.c instructs_rr.c\
-			bruteforce.c bf_get_next_try.c bf_basic_checks.c bf_strict_checks.c bf_push_and_brute.c
+			bruteforce.c bf_get_next_try.c bf_basic_checks.c bf_strict_checks.c bf_push_and_brute.c\
+			al_clean_instructs.c al_brute_chunks.c
 
 OBJECTS =	$(SOURCES:.c=.o)
 

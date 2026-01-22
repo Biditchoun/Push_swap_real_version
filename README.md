@@ -129,7 +129,7 @@ and my bruteforce will sort them in *a*.\
 This allows the bruteforce to be used in algorithms, which will be useful later on.
 
 ## Algorithms
-###push\_and\_brute
+### push\_and\_brute
 
 This cannot be called a proper algorithm. However, it is still implemented.\
 How it works is extremely simple : I am just pushing the top numbers (until 5) to *b* before calling the bruteforce.\
