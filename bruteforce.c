@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/22 21:04:10 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/27 03:57:56 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,48 @@
 
 void	initialise_params(t_bf *params, t_stack *a, t_stack *b)
 {
-	params->instructs[0] = 1;
-	params->instructs[1] = -1;
-	params->instructs_size = 1;
 	params->smallest_nb = INT_MAX;
 	params->a_size = 0;
-	while (a)
-	{
-		if (a->nb < params->smallest_nb && params->a_size < params->a_amount)
-			params->smallest_index = params->a_size + 1;
-		if (params->a_size++ < params->a_amount && a->nb < params->smallest_nb)
-			params->smallest_nb = a->nb;
-		a = a->next;
-	}
 	params->b_size = 0;
-	while (b)
+	while (a || b)
 	{
-		if (b->nb < params->smallest_nb && params->b_size < params->b_amount)
+		if (a && a->nb < params->smallest_nb
+			&& params->a_size < params->a_amount)
+			params->smallest_index = params->a_size + 1;
+		if (a && params->a_size++ < params->a_amount
+			&& a->nb < params->smallest_nb)
+			params->smallest_nb = a->nb;
+		if (a)
+			a = a->next;
+		if (b && b->nb < params->smallest_nb
+			&& params->b_size < params->b_amount)
 			params->smallest_index = -params->b_size - 1;
-		if (params->b_size++ < params->b_amount && b->nb < params->smallest_nb)
+		if (b && params->b_size++ < params->b_amount
+			&& b->nb < params->smallest_nb)
 			params->smallest_nb = b->nb;
-		b = b->next;
+		if (b)
+			b = b->next;
 	}
 	params->amount_to_sort = min(params->a_amount, params->a_size)
 		+ min(params->b_amount, params->b_size);
+}
+
+int	initialise_instructs(t_bf *params)
+{
+	params->instructs_msize = max(0, BRUTEFORCE - 2);
+	if (params->a_amount > params->a_size && params->b_amount > params->b_size)
+		params->instructs_msize = BRUTEFORCE;
+	if (params->a_amount == INT_MAX - 1 || params->b_amount == INT_MAX - 1
+		|| (params->a_amount < params->a_size
+			&& params->b_amount < params->b_size))
+		params->instructs_msize = 10;
+	params->instructs = malloc(sizeof(int) * (params->instructs_msize + 2));
+	if (!params->instructs)
+		return (-1);
+	params->instructs[0] = 1;
+	params->instructs[1] = -1;
+	params->instructs_size = 1;
+	return (0);
 }
 
 int	check_if_brutesorted(t_stack *a, int amount)
@@ -53,21 +71,6 @@ int	check_if_brutesorted(t_stack *a, int amount)
 		a = a->next;
 	}
 	return (1);
-}
-
-int	apply_instructs(t_stack **a, t_stack **b,
-		int *instructs, void **f_instructs)
-{
-	int	(*f)(t_stack **, t_stack **);
-	int	i;
-
-	i = -1;
-	while (instructs[++i] > -1)
-	{
-		f = f_instructs[instructs[i]];
-		f(a, b);
-	}
-	return (i);
 }
 
 void	undo_changes(t_stack **a, t_stack **b, t_bf *params)
@@ -101,28 +104,26 @@ int	*bruteforce(t_stack **a, t_stack **b, int a_amount, int b_amount)
 	t_bf		params;
 	static void	*f_instructs[12] = {&pa, &pb, &sa, &sb, &ss,
 		&ra, &rb, &rr, &rra, &rrb, &rrr, NULL};
-	int			rt;
+	int			check_rt;
 
 	params.a_amount = a_amount;
 	params.b_amount = b_amount;
 	params.f_instructs = f_instructs;
 	initialise_params(&params, *a, *b);
-	while (params.instructs_size <= BRUTEFORCE)
+	if (initialise_instructs(&params))
+		return (NULL);
+	while (params.instructs_size <= params.instructs_msize)
 	{
 		get_next_try(&params);
 		while (check_smallest_index(params.instructs, params.smallest_index,
 				params.a_size, params.b_size))
 			get_next_try(&params);
-/*#include <stdio.h>
-int i = -1;
-while (params.instructs[++i] > -1)
-	printf("%i ", params.instructs[i]);
-printf("\n");*/
 		apply_instructs(a, b, params.instructs, params.f_instructs);
-		rt = check_if_brutesorted(*a, params.amount_to_sort);
+		check_rt = check_if_brutesorted(*a, params.amount_to_sort);
 		undo_changes(a, b, &params);
-		if (rt)
-			return (arr_dup(params.instructs, params.instructs_size + 1));
+		if (check_rt)
+			return (params.instructs);
 	}
+	free(params.instructs);
 	return (NULL);
 }

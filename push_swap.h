@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/22 21:47:38 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/27 07:12:30 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include "libft/libft.h"
 
-# if BRUTEFORCE < 10
+# if BRUTEFORCE < 0
 #  undef BRUTEFORCE
-#  define BRUTEFORCE 10
+#  define BRUTEFORCE 0
 # endif
 
 typedef struct s_stack
@@ -29,8 +29,9 @@ typedef struct s_stack
 
 typedef struct s_bruteforce
 {
-	int		instructs[BRUTEFORCE + 2];
+	int		*instructs;
 	int		instructs_size;
+	int		instructs_msize;
 	void	**f_instructs;
 	int		a_size;
 	int		b_size;
@@ -43,7 +44,7 @@ typedef struct s_bruteforce
 
 typedef struct s_algo
 {
-	void	(f)(t_stack **, t_stack **, struct s_algo *, int);
+	void	(*f)(t_stack **, t_stack **, struct s_algo *, int);
 	int		min_moves;
 	int		curr_moves;
 	int		*instructs;
@@ -83,8 +84,10 @@ int		check_rrotate(t_bf *params, int i, int a_size, int b_size);
 int		strict_checks(t_bf *params, int rt);
 int		check_smallest_index(int *instructs, int s_ind, int a_size, int b_size);
 
+void	brute_chunks(t_stack **a, t_algo *info, int a_size);
+int		apply_instructs(t_stack **a, t_stack **b,
+			int *instructs, void **f_instructs);
 int		*clean_instructs(int *instructs);
-int		*brute_chunks(t_stack **a, t_stack **b, t_algo *info, a_size);
 
 #endif
 

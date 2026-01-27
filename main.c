@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/22 20:58:58 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/27 07:57:23 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	print_instructs(int *instructs)
 		"ss\n", "ra\n", "rb\n", "rr\n", "rra\n", "rrb\n", "rrr\n", NULL};
 	int			i;
 
+	if (!instructs)
+		return (ft_printf("No solution found\n"));
 	i = -1;
 	while (instructs[++i] > -1)
 	{
@@ -106,7 +108,7 @@ int	do_the_magic(t_stack **a, int argssize)
 	while (algos_list[++i])
 	{
 		info.f = algos_list[i];
-		info.curr_instructs = f(a, b, info, argssize);
+		info.f(a, b, &info, argssize);
 		if (info.min_moves > info.curr_moves)
 		{
 			info.min_moves = info.curr_moves;
@@ -116,6 +118,7 @@ int	do_the_magic(t_stack **a, int argssize)
 		else
 			free(info.curr_instructs);
 	}
+info.instructs = NULL;
 	return (print_instructs(info.instructs));
 }
 

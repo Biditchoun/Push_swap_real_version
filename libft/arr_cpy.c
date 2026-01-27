@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   al_clean_instructs.c                               :+:      :+:    :+:   */
+/*   arr_cpy.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/22 19:48:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/27 03:05:49 by sawijnbe         ###   ########.fr       */
+/*   Created: 2026/01/27 07:18:19 by sawijnbe          #+#    #+#             */
+/*   Updated: 2026/01/27 07:23:42 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
-
-int	apply_instructs(t_stack **a, t_stack **b,
-		int *instructs, void **f_instructs)
+int	arr_cpy(int *dest, int *src, int src_size, int end)
 {
-	int	(*f)(t_stack **, t_stack **);
 	int	i;
 
 	i = -1;
-	while (instructs[++i] > -1)
-	{
-		f = f_instructs[instructs[i]];
-		f(a, b);
-	}
+	while (++i < src_size && src[i] != end)
+		dest[i] = src[i];
+	if (i < src_size)
+		dest[i] = src[i];
 	return (i);
-}
-
-int	*clean_instructs(int *instructs)
-{
-	return (instructs);
 }

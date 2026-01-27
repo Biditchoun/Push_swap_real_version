@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   setup_list.c                                       :+:      :+:    :+:   */
+/*   m_setup_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 16:17:48 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/11 21:17:30 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/27 04:42:45 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ t_stack	*convert_to_list(int *args, int argssize)
 	return (rt);
 }
 
-/*
 t_stack	*copy_list(t_stack *a)
 {
 	t_stack	*rt;
@@ -120,4 +119,4 @@ t_stack	*copy_list(t_stack *a)
 	curr->next = NULL;
 	rt->prev = curr;
 	return (rt);
-}*/
+}

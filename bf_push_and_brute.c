@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 19:56:29 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/22 19:35:40 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/27 02:34:08 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,11 @@ int	*brute_push_and_brute(t_stack **a, t_stack **b)
 {
 	int	*instructs;
 
-	instructs = bruteforce(a, b, INT_MAX, 0);
+	instructs = bruteforce(a, b, INT_MAX, 1);
 	if (!instructs)
-		instructs = push_and_brute(a, b, 0);
+	{
+		pb(a, b);
+		instructs = push_and_brute(a, b, 1);
+	}
 	return (instructs);
 }
