@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/27 07:57:23 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/28 16:01:57 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	do_the_magic(t_stack **a, int argssize)
 {
 	t_stack		*b[1];
 	t_algo		info;
-	static void	*algos_list[2] = {&brute_chunks, NULL};
+	static void	*algos_list[2] = {/*&brute_chunks*/NULL, NULL};
 	int			i;
 
 	*b = NULL;

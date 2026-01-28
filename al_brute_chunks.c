@@ -6,90 +6,149 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 18:37:14 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/27 07:57:36 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/28 18:36:45 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	push_chunk_to_b(t_stack **a, t_stack **b, int *instructs, int max_nb)
+int	find_biggest_gap(t_stack **a, int **biggest_gap, int max_nb, int a_size)
 {
-	(void)(a);
-	(void)(b);
-	(void)(instructs);
-	(void)(max_nb);
-	return (0);
+	t_stack	*nb1;
+	t_stack	*nb2;
+	int		nb1_index;
+	int		nb2_index;
+
+	biggest_gap[0][0] = -42;
+	biggest_gap[0][1] = -42;
+	biggest_gap[1][0] = 0;
+	biggest_gap[1][1] = 0;
+	nb1_index = 0;
+	nb2_index = 0;
+	nb1 = *a;
+	while (nb1)
+	{
+		while (nb1 && nb1->nb < max_nb && ++nb1_index)
+			nb1 = nb1->next;
+		if (!nb1)
+			break ;
+		nb2 = nb1;
+		nb2_index = nb1_index;
+		while (nb2 && nb2->nb >= max_nb && ++nb2_index)
+			nb2 = nb2->next;
+		if (nb2_index - nb1_index > biggest_gap[1][1] - biggest_gap[1][0])
+		{
+			biggest_gap[0][0] = nb1->nb;
+			biggest_gap[0][1] = nb2->nb;
+			biggest_gap[1][0] = nb1_index;
+			biggest_gap[1][1] = nb2_index;
+		}
+		nb1 = nb1->next;
+		while (nb1 && nb1->nb >= max_nb && ++nb1_index)
+			nb1 = nb1->next;
+	}
+	if (a_size / 2 - biggest_gap[1][0] > biggest_gap[1][1] - a_size / 2)
+		return (0);
+	return (1);
 }
 
-int	push_all_to_b(t_stack **a, t_stack **b, int chunk_size, int *instructs)
+int	push_two_chunks_to_b(t_bc *par, int i, int chunk_nb)
 {
-	int		a_size;
-	int		i;
-	int		rt;
-	t_stack	*curr;
-
-	curr = *a;
-	a_size = 0;
-	while (curr && ++a_size)
-		curr = curr->next;
-	i = 0;
-	rt = 0;
-	while (a_size > chunk_size * ++i)
-		rt += push_chunk_to_b(a, b, instructs, chunk_size * i);
-	a_size = -5;
-	while (curr && ++a_size > -5)
-		curr = curr->next;
-	if (a_size > 0 && i--)
-		rt += push_chunk_to_b(a, b, instructs, chunk_size * i + a_size);
-	return (rt);
-}
-
-int	push_all_to_a(t_stack **a, t_stack **b, int *instructs, int i)
-{
-	(void)a;
-	(void)b;
-	(void)instructs;
+	int	biggest_gap_nb[2][2];
+	int	nb1_max;
+	int	nb2_max;
+	int	to_move;
+	int	ra_or_rra;
+	
+	nb1_max = par->chunk_size * chunk_nb;
+	nb2_max = nb1_max;
+	if (par->nb_amount > par->chunk_size * (chunk_nb + 1)) 
+		nb2_max = par->chunk_size * (chunk_nb + 1);
+	to_move = par->chunk_size * 2;
+	if (nb1_max == nb2_max)
+		to_move = par->chunk_size;
+	ra_or_rra = find_biggest_gap(par->a, biggest_gap_nb, nb2_max, par->a_size);
+	while (to_move--)
+	{
+		while ((*par->a)->nb > nb2_max)
+		{
+			if (!ra_or_rra)
+				par->instructs[i++] = ra(par->a, par->b);
+			else
+				par->instructs[i++] = rra(par->a, par->b);
+		}
+		if (biggest_gap_nb[0][0] == (*par->a)->nb || biggest_gap_nb[0][1] == (*par->a)->nb)
+			ra_or_rra -= 1;
+		par->instructs[i++] = pb(par->a, par->b);
+		par->a_size--;
+		if ((*par->b)->nb > nb1_max && (*par->b)->next)
+			par->instructs[i++] = rb(par->a, par->b);
+	}
 	return (i);
 }
 
-int	*brute_chunk(t_stack **a, int chunk_size, void **f_instructs)
+int	push_all_to_b(t_bc *par)
 {
-	t_stack	*a_cp[1];
-	t_stack	*b_cp[1];
-	int		rt[111111];
-	int		*bruteforce_rt;
-	int		i;
+	int	chunk_nb;
+	int	i;
 
-	(*a_cp) = copy_list(*a);
-	if (!*a_cp)
+	chunk_nb = 0;
+	i = 0;
+	while (par->nb_amount > par->chunk_size * ++chunk_nb)
+		i = push_two_chunks_to_b(par, i, chunk_nb++);
+	while (par->a_size-- > 5)
+	{
+		if ((*par->a)->nb < par->nb_amount - 5)
+			par->instructs[i++] = pb(par->a, par->b);
+		else
+			par->instructs[i++] = ra(par->a, par->b);
+	}
+	return (i);
+}
+
+int	push_all_to_a(t_bc *par, int i)
+{
+	(void)par;
+	return (i);
+}
+
+int	*brute_chunk(t_stack **a, int chunk_size, int a_size)
+{
+	t_bc		par;
+	static void	*f_instructs[] = {&pa, &pb, &sa, &sb, &ss, &ra, &rb, &rr, &rra, &rrb, &rrr, NULL};
+	int			i;
+
+	*par.a = copy_list(*a);
+	if (!*a)
 		return (NULL);
-	(*b_cp) = NULL;
-	i = push_all_to_b(a_cp, b_cp, chunk_size, rt);
-	bruteforce_rt = bruteforce(a_cp, b_cp, INT_MAX - 1, 0);
-	i += arr_cpy(&rt[i], bruteforce_rt, INT_MAX, -1);
-	apply_instructs(a_cp, b_cp, bruteforce_rt, f_instructs);
-	free(bruteforce_rt);
-	i = push_all_to_a(a_cp, b_cp, rt, i);
-i = 0;
-	rt[i] = -1;
-	rtptr_free_list(NULL, *a_cp);
-	return (arr_dup(rt, i + 1));
+	*par.b = NULL;
+	par.f_instructs = f_instructs;
+	par.chunk_size = chunk_size;
+	par.nb_amount = a_size;
+	par.a_size = a_size;
+	i = push_all_to_b(&par);
+	par.bruteforce_rt = bruteforce(par.a, par.b, INT_MAX - 1, 0);
+	i += arr_cpy(&par.instructs[i], par.bruteforce_rt, INT_MAX, -1);
+	apply_instructs(par.a, par.b, par.bruteforce_rt, par.f_instructs);
+	free(par.bruteforce_rt);
+	i = push_all_to_a(&par, i);
+	par.instructs[i] = -1;
+	rtptr_free_list(NULL, *par.a);
+	return (arr_dup(par.instructs, i + 1));
 }
 
 void	brute_chunks(t_stack **a, t_algo *info, int a_size)
 {
-	static void	*f_instructs[12] = {&pa, &pb, &sa, &sb, &ss,
-		&ra, &rb, &rr, &rra, &rrb, &rrr, NULL};
-	int			i;
-	int			*buff;
-	int			buff_size;
+	int	i;
+	int	*buff;
+	int	buff_size;
 
 	info->curr_instructs = NULL;
 	info->curr_moves = INT_MAX;
 	i = 1;
 	while (a_size / i > 5)
 	{
-		buff = brute_chunk(a, a_size / i, f_instructs);
+		buff = brute_chunk(a, a_size / i, a_size);
 		buff = clean_instructs(buff);
 		buff_size = arr_len(buff, -1);
 		if (buff_size < info->curr_moves)

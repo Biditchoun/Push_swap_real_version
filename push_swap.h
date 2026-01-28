@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/27 07:12:30 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/28 16:44:26 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,41 +20,17 @@
 #  define BRUTEFORCE 0
 # endif
 
+int		check_argssize(int ac, char **av);
+int		*convert_to_arr(char **av, int argssize);
+int		check_if_sorted(int *a, int a_size);
+void	replace_value_with_index(int *a, int *a_cpy, int a_size);
+
 typedef struct s_stack
 {
 	int				nb;
 	struct s_stack	*next;
 	struct s_stack	*prev;
 }	t_stack;
-
-typedef struct s_bruteforce
-{
-	int		*instructs;
-	int		instructs_size;
-	int		instructs_msize;
-	void	**f_instructs;
-	int		a_size;
-	int		b_size;
-	int		a_amount;
-	int		b_amount;
-	int		amount_to_sort;
-	int		smallest_nb;
-	int		smallest_index;
-}	t_bf;
-
-typedef struct s_algo
-{
-	void	(*f)(t_stack **, t_stack **, struct s_algo *, int);
-	int		min_moves;
-	int		curr_moves;
-	int		*instructs;
-	int		*curr_instructs;
-}	t_algo;
-
-int		check_argssize(int ac, char **av);
-int		*convert_to_arr(char **av, int argssize);
-int		check_if_sorted(int *a, int a_size);
-void	replace_value_with_index(int *a, int *a_cpy, int a_size);
 
 t_stack	*convert_to_list(int *args, int argssize);
 t_stack	*copy_list(t_stack *a);
@@ -73,6 +49,21 @@ int		rra(t_stack **a, t_stack **b);
 int		rrb(t_stack **a, t_stack **b);
 int		rrr(t_stack **a, t_stack **b);
 
+typedef struct s_bruteforce
+{
+	int		*instructs;
+	int		instructs_size;
+	int		instructs_msize;
+	void	**f_instructs;
+	int		a_size;
+	int		b_size;
+	int		a_amount;
+	int		b_amount;
+	int		amount_to_sort;
+	int		smallest_nb;
+	int		smallest_index;
+}	t_bf;
+
 int		*brute_push_and_brute(t_stack **a, t_stack **b);
 int		*bruteforce(t_stack **a, t_stack **b, int a_amount, int b_amount);
 void	get_next_try(t_bf *params);
@@ -84,10 +75,32 @@ int		check_rrotate(t_bf *params, int i, int a_size, int b_size);
 int		strict_checks(t_bf *params, int rt);
 int		check_smallest_index(int *instructs, int s_ind, int a_size, int b_size);
 
-void	brute_chunks(t_stack **a, t_algo *info, int a_size);
+typedef struct s_algo
+{
+	void	(*f)(t_stack **, t_stack **, struct s_algo *, int);
+	int		min_moves;
+	int		curr_moves;
+	int		*instructs;
+	int		*curr_instructs;
+}	t_algo;
+
 int		apply_instructs(t_stack **a, t_stack **b,
 			int *instructs, void **f_instructs);
 int		*clean_instructs(int *instructs);
+
+typedef struct s_bc
+{
+	void	**f_instructs;
+	t_stack	*a[1];
+	t_stack	*b[1];
+	int		instructs[111111];
+	int		*bruteforce_rt;
+	int		nb_amount;
+	int		a_size;
+	int		chunk_size;
+}	t_bc;
+
+void	brute_chunks(t_stack **a, t_algo *info, int a_size);
 
 #endif
 

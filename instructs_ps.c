@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:57:30 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/22 19:59:33 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/01/28 09:08:26 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	pb(t_stack **a, t_stack **b)
 	t_stack	*node_to_move;
 
 	if (!a || !*a)
-		return (0);
+		return (-1);
 	node_to_move = *a;
 	*a = (*a)->next;
 	if (*a)
@@ -58,7 +58,7 @@ int	sa(t_stack **a, t_stack **b)
 
 	(void)b;
 	if (!a || !*a || !(*a)->next)
-		return (0);
+		return (-1);
 	buff = (*a)->nb;
 	(*a)->nb = (*a)->next->nb;
 	(*a)->next->nb = buff;
@@ -71,7 +71,7 @@ int	sb(t_stack **a, t_stack **b)
 
 	(void)a;
 	if (!b || !*b || !(*b)->next)
-		return (0);
+		return (-1);
 	buff = (*b)->nb;
 	(*b)->nb = (*b)->next->nb;
 	(*b)->next->nb = buff;
