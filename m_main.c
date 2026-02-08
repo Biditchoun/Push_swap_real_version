@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   m_main.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/28 16:01:57 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/08 17:06:19 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ int	do_the_magic(t_stack **a, int argssize)
 {
 	t_stack		*b[1];
 	t_algo		info;
-	static void	*algos_list[2] = {/*&brute_chunks*/NULL, NULL};
+	static void	*algos_list[2] = {&brute_chunks, NULL};
 	int			i;
 
 	*b = NULL;
-	info.instructs = brute_push_and_brute(a, b);
+	info.instructs = brute_push_and_brute(a, b, argssize);
 	if (info.instructs)
 		return (print_instructs(info.instructs));
 	info.min_moves = INT_MAX;
@@ -108,7 +108,7 @@ int	do_the_magic(t_stack **a, int argssize)
 	while (algos_list[++i])
 	{
 		info.f = algos_list[i];
-		info.f(a, b, &info, argssize);
+		info.f(a, &info, argssize);
 		if (info.min_moves > info.curr_moves)
 		{
 			info.min_moves = info.curr_moves;
@@ -118,7 +118,6 @@ int	do_the_magic(t_stack **a, int argssize)
 		else
 			free(info.curr_instructs);
 	}
-info.instructs = NULL;
 	return (print_instructs(info.instructs));
 }
 

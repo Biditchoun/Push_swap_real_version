@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/28 16:44:26 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/08 16:37:02 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_bruteforce
 	int		smallest_index;
 }	t_bf;
 
-int		*brute_push_and_brute(t_stack **a, t_stack **b);
+int		*brute_push_and_brute(t_stack **a, t_stack **b, int a_size);
 int		*bruteforce(t_stack **a, t_stack **b, int a_amount, int b_amount);
 void	get_next_try(t_bf *params);
 int		increment_and_fill(t_bf *params, int i, int b_size);
@@ -77,7 +77,7 @@ int		check_smallest_index(int *instructs, int s_ind, int a_size, int b_size);
 
 typedef struct s_algo
 {
-	void	(*f)(t_stack **, t_stack **, struct s_algo *, int);
+	void	(*f)(t_stack **, struct s_algo *, int);
 	int		min_moves;
 	int		curr_moves;
 	int		*instructs;

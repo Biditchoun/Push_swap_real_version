@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:14:34 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/19 22:59:16 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/08 17:53:44 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	get_next_try(t_bf *params)
 	else
 		increment_and_fill(params, params->instructs_size - 1, params->b_size);
 	valid = 1;
-	while (valid)
+	while (valid && params->instructs_size < params->instructs_msize)
 	{
 		valid = get_next_valid_instructs(params, params->instructs);
 		if (params->a_amount < params->a_size
