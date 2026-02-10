@@ -6,75 +6,75 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 18:37:14 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/02/08 19:15:23 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/10 23:33:31 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	find_biggest_gap(t_stack **a, int *biggest_gap, int max_nb, int a_size)
+int	find_biggest_gap(t_stack *a, int a_size, int nb_max, int *nb_limit)
 {
-	t_stack	*nb1;
-	t_stack	*nb2;
-	int		nb1_index;
-	int		nb2_index;
-
-	biggest_gap[0] = -42;
-	biggest_gap[1] = -42;
-	biggest_gap[2] = 0;
-	biggest_gap[3] = 0;
-	nb1_index = 0;
-	nb2_index = 0;
-	nb1 = *a;
-	while (nb1)
+	t_stack	*comp;
+	int		i;
+	int		j;
+	int		gap_size;
+	int		ra_or_rra;
+	
+	*nb_limit = -1;
+	ra_or_rra = 0;
+	gap_size = 0;
+	i = 0;
+	while (a)
 	{
-		while (nb1 && nb1->nb < max_nb && ++nb1_index)
-			nb1 = nb1->next;
-		if (!nb1)
-			break ;
-		nb2 = nb1;
-		nb2_index = nb1_index;
-		while (nb2 && nb2->nb >= max_nb && ++nb2_index)
-			nb2 = nb2->next;
-		if (nb2 && nb2_index - nb1_index > biggest_gap[3] - biggest_gap[2])
+		while (a && a->nb < nb_max && ++i)
+			a = a->next;
+		if (!a)
+			return (ra_or_rra);
+		j = i;
+		comp = a;
+		while (comp->next && comp->next->nb >= nb_max && ++j)
+			comp = comp->next;
+		if (j - i > gap_size)
 		{
-			biggest_gap[0] = nb1->nb;
-			biggest_gap[1] = nb2->nb;
-			biggest_gap[2] = nb1_index;
-			biggest_gap[3] = nb2_index;
+			gap_size = j - i + 1;
+			ra_or_rra = 0;
+			*nb_limit = a->nb;
+//This condition needs fixing
+			if (gap_size > a_size - j)
+			{
+				ra_or_rra = 1;
+				*nb_limit = comp->nb;
+			}
 		}
-		nb1 = nb1->next;
-		while (nb1 && nb1->nb >= max_nb && ++nb1_index)
-			nb1 = nb1->next;
+		while (a && a->nb >= nb_max && ++i)
+			a = a->next;
 	}
-	if (a_size / 2 - biggest_gap[2] > biggest_gap[3] - a_size / 2)
-		return (0);
-	return (1);
+	return (ra_or_rra);
 }
 
 int	push_two_chunks_to_b(t_bc *par, int i, int chunk_nb)
 {
-//	int		biggest_gap_nb[4];
-	int		nb1_max;
-	int		nb2_max;
-	int		to_move;
-//	int		ra_or_rra;
+	int	nb1_max;
+	int	nb2_max;
+	int	to_move;
+	int	ra_or_rra;
+	int	ra_or_rra_limit;
 	
 	nb1_max = min(par->chunk_size * chunk_nb, par->nb_amount - 6);
 	nb2_max = min(par->chunk_size * (chunk_nb + 1), par->nb_amount - 6);
 	to_move = nb2_max - (par->chunk_size * (chunk_nb - 1));
-//	ra_or_rra = find_biggest_gap(par->a, biggest_gap_nb, nb2_max, par->a_size);
+	ra_or_rra = find_biggest_gap(*(par->a), par->a_size, nb2_max, &ra_or_rra_limit);
 	while (to_move--)
 	{
 		while ((*par->a)->nb >= nb2_max)
-//		{
-//			if (!ra_or_rra)
+		{
+			if ((*par->a)->nb == ra_or_rra_limit)
+				ra_or_rra = find_biggest_gap(*(par->a), par->a_size, nb2_max, &ra_or_rra_limit);
+			if (!ra_or_rra)
 				par->instructs[i++] = ra(par->a, par->b);
-//			else
-//				par->instructs[i++] = rra(par->a, par->b);
-//		}
-//		if (biggest_gap_nb[0] == (*par->a)->nb || biggest_gap_nb[1] == (*par->a)->nb)
-//			ra_or_rra -= 1;
+			else
+				par->instructs[i++] = rra(par->a, par->b);
+		}
 		par->instructs[i++] = pb(par->a, par->b);
 		par->a_size--;
 		if ((*par->b)->nb >= nb1_max && (*par->b)->next)
