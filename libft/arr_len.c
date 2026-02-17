@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 19:52:14 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/22 19:53:42 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/17 08:40:11 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@ int	arr_len(int *arr, int end)
 {
 	int	i;
 
+	if (!arr)
+		return (-1);
 	i = 0;
 	while (arr[i] != end)
 		i++;

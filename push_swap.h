@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/02/10 15:04:52 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/17 09:01:27 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,13 @@ typedef struct s_bc
 	t_stack	*a[1];
 	t_stack	*b[1];
 	int		instructs[111111];
-	int		*bruteforce_rt;
 	int		nb_amount;
 	int		a_size;
 	int		chunk_size;
 }	t_bc;
 
 void	brute_chunks(t_stack **a, t_algo *info, int a_size);
+int		push_all_to_b(t_bc *par);
 
 #endif
 

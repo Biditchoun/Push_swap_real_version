@@ -6,108 +6,64 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 18:37:14 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/02/10 23:33:31 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/17 09:16:32 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	find_biggest_gap(t_stack *a, int a_size, int nb_max, int *nb_limit)
+void	*determine_rotation(t_bc *par, int amount_in_a, int b_size)
 {
-	t_stack	*comp;
-	int		i;
-	int		j;
-	int		gap_size;
-	int		ra_or_rra;
-	
-	*nb_limit = -1;
-	ra_or_rra = 0;
-	gap_size = 0;
-	i = 0;
-	while (a)
-	{
-		while (a && a->nb < nb_max && ++i)
-			a = a->next;
-		if (!a)
-			return (ra_or_rra);
-		j = i;
-		comp = a;
-		while (comp->next && comp->next->nb >= nb_max && ++j)
-			comp = comp->next;
-		if (j - i > gap_size)
-		{
-			gap_size = j - i + 1;
-			ra_or_rra = 0;
-			*nb_limit = a->nb;
-//This condition needs fixing
-			if (gap_size > a_size - j)
-			{
-				ra_or_rra = 1;
-				*nb_limit = comp->nb;
-			}
-		}
-		while (a && a->nb >= nb_max && ++i)
-			a = a->next;
-	}
-	return (ra_or_rra);
 }
 
-int	push_two_chunks_to_b(t_bc *par, int i, int chunk_nb)
+bool	check_if_all_at_top(t_stack *b, int amount_in_a, int b_size)
 {
-	int	nb1_max;
-	int	nb2_max;
-	int	to_move;
-	int	ra_or_rra;
-	int	ra_or_rra_limit;
-	
-	nb1_max = min(par->chunk_size * chunk_nb, par->nb_amount - 6);
-	nb2_max = min(par->chunk_size * (chunk_nb + 1), par->nb_amount - 6);
-	to_move = nb2_max - (par->chunk_size * (chunk_nb - 1));
-	ra_or_rra = find_biggest_gap(*(par->a), par->a_size, nb2_max, &ra_or_rra_limit);
-	while (to_move--)
+}
+
+int	get_next_five_to_top(t_bc *par, int i, int *amount_in_a, int *b_size)
+{
+	int	(*rb_or_rrb)(t_stack **a, t_stack **b);
+
+	ra_or_rra = &ra;
+	while (rb_or_rrb)
 	{
-		while ((*par->a)->nb >= nb2_max)
-		{
-			if ((*par->a)->nb == ra_or_rra_limit)
-				ra_or_rra = find_biggest_gap(*(par->a), par->a_size, nb2_max, &ra_or_rra_limit);
-			if (!ra_or_rra)
-				par->instructs[i++] = ra(par->a, par->b);
-			else
-				par->instructs[i++] = rra(par->a, par->b);
-		}
-		par->instructs[i++] = pb(par->a, par->b);
-		par->a_size--;
-		if ((*par->b)->nb >= nb1_max && (*par->b)->next)
-			par->instructs[i++] = rb(par->a, par->b);
+		rb_or_rrb = determine_rotation(par, *amount_in_a, *b_size);
+		while ((*par->b)->nb < *b_size - 5)
+			par->instructs[i++] = rb_or_rrb(par->a, par->b);
+		if (!check_if_all_at_top((*par->b), *amount_in_a, *b_size))
+			while ((*par->b) >= *b_size - 5 && ++(*amount_in_a))
+				par->instructs[i++] = pa(par->a, par->b);
 	}
 	return (i);
 }
 
-int	push_all_to_b(t_bc *par)
+int	push_all_to_a(t_bc *par, int i, int b_size)
 {
-	int	chunk_nb;
-	int	i;
+	int	amount_in_a;
+	int	*bruteforce_rt;
 
-	chunk_nb = 0;
-	i = 0;
-	while (par->a_size > 6 && ++chunk_nb)
-		i = push_two_chunks_to_b(par, i, chunk_nb++);
-	par->a_size++;
-	return (i);
-}
-
-int	push_all_to_a(t_bc *par, int i)
-{
-	while (*(par->b) && par->a_size++ > -1)
-		par->instructs[i++] = pa(par->a, par->b);
+	while (*par->b)
+	{
+		amount_in_a = 0;
+		i = get_next_five_to_top(par, i, &amount_in_a, &b_size);
+		bruteforce_rt = bruteforce(par->a, par->b, amount_in_a, 5 - amount_in_a);
+		if (!bruteforce_rt)
+			return (0);
+		i += arr_cpy(&par->instructs[i], bruteforce_rt, INT_MAX, -1);
+		apply_instructs(par->a, par->b, bruteforce_rt, par->f_instructs);
+		free(bruteforce_rt);
+		b_size = b_size - 5 + amount_in_a;
+	}
 	return (i);
 }
 
 int	*brute_chunk(t_stack **a, int chunk_size, int a_size)
 {
 	t_bc		par;
-	static void	*f_instructs[] = {&pa, &pb, &sa, &sb, &ss, &ra, &rb, &rr, &rra, &rrb, &rrr, NULL};
+	static void	*f_instructs[] = {&pa, &pb, &sa, &sb, &ss,
+		&ra, &rb, &rr, &rra, &rrb, &rrr, NULL};
 	int			i;
+	int			*bruteforce_rt;
 
 	*par.a = copy_list(*a);
 	if (!*a)
@@ -118,11 +74,13 @@ int	*brute_chunk(t_stack **a, int chunk_size, int a_size)
 	par.nb_amount = a_size;
 	par.a_size = a_size;
 	i = push_all_to_b(&par);
-	par.bruteforce_rt = bruteforce(par.a, par.b, INT_MAX - 1, 0);
-	i += arr_cpy(&par.instructs[i], par.bruteforce_rt, INT_MAX, -1);
-	apply_instructs(par.a, par.b, par.bruteforce_rt, par.f_instructs);
-	free(par.bruteforce_rt);
-	i = push_all_to_a(&par, i);
+	bruteforce_rt = bruteforce(par.a, par.b, INT_MAX - 1, 0);
+	if (!bruteforce_rt)
+		return (NULL);
+	i += arr_cpy(&par.instructs[i], bruteforce_rt, INT_MAX, -1);
+	apply_instructs(par.a, par.b, bruteforce_rt, par.f_instructs);
+	free(bruteforce_rt);
+	i = push_all_to_a(&par, i, par.nb_amount - par.a_size);
 	par.instructs[i] = -1;
 	rtptr_free_list(NULL, *par.a);
 	return (arr_dup(par.instructs, i + 1));
@@ -142,7 +100,7 @@ void	brute_chunks(t_stack **a, t_algo *info, int a_size)
 		buff = brute_chunk(a, a_size / i, a_size);
 		buff = clean_instructs(buff);
 		buff_size = arr_len(buff, -1);
-		if (buff_size < info->curr_moves)
+		if (buff_size < info->curr_moves && buff_size > 0)
 		{
 			free(info->curr_instructs);
 			info->curr_instructs = buff;
