@@ -6,13 +6,13 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 11:47:52 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/02/12 22:33:15 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/18 22:04:35 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	check_list(t_stack *a)
+/*void	check_list(t_stack *a)
 {
 #include <stdio.h>
 	t_stack *cp, *cp2;
@@ -34,7 +34,7 @@ void	check_list(t_stack *a)
 	}
 	printf("\n");
 }
-
+*/
 void	bubble_sort(int *a, int a_size)
 {
 	int	i;
