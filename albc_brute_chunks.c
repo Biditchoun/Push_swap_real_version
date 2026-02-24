@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 18:37:14 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/02/18 22:27:59 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/24 23:03:09 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,11 @@ int	push_all_to_a(t_bc *par, int i, int b_size)
 		free(bruteforce_rt);
 		b_size -= 5;
 	}
-	bruteforce_rt = bruteforce(par->a, par->b, amount_in_a, INT_MAX - 1);
-	if (!bruteforce_rt)
+	bruteforce_rt = bruteforce(par->a, par->b, 0, INT_MAX - 1);
+	if (!bruteforce_rt && *par->b)
 		return (0);
+	if (!bruteforce_rt)
+		return (i);
 	i += arr_cpy(&par->instructs[i], bruteforce_rt, INT_MAX, -1);
 	apply_instructs(par->a, par->b, bruteforce_rt, par->f_instructs);
 	free(bruteforce_rt);

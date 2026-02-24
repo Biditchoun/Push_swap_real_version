@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:07:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/02/18 21:54:33 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/24 22:52:15 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	*bruteforce(t_stack **a, t_stack **b, int a_amount, int b_amount)
 	params.b_amount = b_amount;
 	params.f_instructs = f_instructs;
 	initialise_params(&params, *a, *b);
-	if (initialise_instructs(&params))
+	if (!params.amount_to_sort || initialise_instructs(&params))
 		return (NULL);
 	while (params.instructs_size <= params.instructs_msize)
 	{

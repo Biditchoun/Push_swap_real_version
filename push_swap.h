@@ -6,7 +6,7 @@
 /*   By: sawijnbe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 18:19:11 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/02/18 22:11:04 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/24 22:19:53 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int		check_push(t_bf *params, int i, int *a_size, int *b_size);
 int		check_swap(t_bf *params, int i, int a_size, int b_size);
 int		check_rotate(t_bf *params, int i, int a_size, int b_size);
 int		check_rrotate(t_bf *params, int i, int a_size, int b_size);
-int		strict_checks(t_bf *params, int rt);
+int		strict_checks(t_bf *params, int rt, int a_top, int b_top);
 int		check_smallest_index(int *instructs, int s_ind, int a_size, int b_size);
 
 typedef struct s_algo

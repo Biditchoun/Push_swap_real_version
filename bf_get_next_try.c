@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:14:34 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/02/08 17:53:44 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/24 22:19:35 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,6 @@ void	get_next_try(t_bf *params)
 		valid = get_next_valid_instructs(params, params->instructs);
 		if (params->a_amount < params->a_size
 			|| params->b_amount < params->b_size)
-			valid = strict_checks(params, valid);
+			valid = strict_checks(params, valid, params->a_amount, params->b_amount);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: sawijnbe <sawijnbe@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 21:26:36 by sawijnbe          #+#    #+#             */
-/*   Updated: 2026/01/19 21:26:17 by sawijnbe         ###   ########.fr       */
+/*   Updated: 2026/02/24 22:51:22 by sawijnbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,31 +103,55 @@ int	invalid_rb_count(t_bf *params, int i, int ra_count, int rb_count)
 	return (increment_and_fill(params, i, 0));
 }
 
-int	strict_checks(t_bf *params, int rt)
+void	update_tops(int instr, int *a_top, int *b_top, int *r_count)
 {
-	int	ra_count;
-	int	rb_count;
+	if (instr == 5 || instr == 7)
+		(*a_top)--;
+	if (instr == 5 || instr == 7)
+		r_count[0]++;
+	if (instr == 6 || instr == 7)
+		(*b_top)--;
+	if (instr == 6 || instr == 7)
+		r_count[1]++;
+	if (instr == 8 || instr == 10)
+		(*a_top)++;
+	if (instr == 8 || instr == 10)
+		r_count[0]--;
+	if (instr == 9 || instr == 10)
+		(*b_top)++;
+	if (instr == 9 || instr == 10)
+		r_count[1]--;
+	if (instr == 0)
+		(*a_top)++;
+	if (instr == 0)
+		(*b_top)--;
+	if (instr == 1)
+		(*a_top)--;
+	if (instr == 1)
+		(*b_top)++;
+}
+
+int	strict_checks(t_bf *params, int rt, int a_top, int b_top)
+{
+	int	r_count[2];
 	int	i;
 
-	ra_count = 0;
-	rb_count = 0;
+	r_count[0] = 0;
+	r_count[1] = 0;
 	i = -1;
 	while (params->instructs[++i] > -1)
 	{
-		if (params->instructs[i] == 5 || params->instructs[i] == 7)
-			ra_count++;
-		if (params->instructs[i] == 6 || params->instructs[i] == 7)
-			rb_count++;
-		if (params->instructs[i] == 8 || params->instructs[i] == 10)
-			ra_count--;
-		if (params->instructs[i] == 9 || params->instructs[i] == 10)
-			rb_count--;
-		if ((ra_count < 0 && params->a_amount < params->a_size)
-			|| (rb_count < 0 && params->b_amount < params->b_size))
+		update_tops(params->instructs[i], &a_top, &b_top, r_count);
+		if ((params->a_amount < params->a_size
+			&& (r_count[0] < 0 || ((a_top < 2 && (params->instructs[i] == 2 || params->instructs[i] == 4))
+				|| (!a_top && params->instructs[i] != 0 && params->instructs[i] != 3 && params->instructs[i] != 6 && !(params->instructs[i] >= 8)))))
+			|| (params->b_amount < params->b_size
+			&& (r_count[1] < 1 || ((b_top < 2 && (params->instructs[i] == 3 || params->instructs[i] == 4))
+				|| (!b_top && params->instructs[i] != 1 && params->instructs[i] != 2 && params->instructs[i] != 5 && !(params->instructs[i] >= 8))))))
 			return (increment_and_fill(params, i, 0));
 	}
-	if ((ra_count && params->a_amount < params->a_size)
-		|| (rb_count && params->b_amount < params->b_size))
-		rt = invalid_rb_count(params, i, ra_count, rb_count);
+	if ((params->a_amount < params->a_size && r_count[0])
+		|| (params->b_amount < params->b_size && r_count[1]))
+		rt = invalid_rb_count(params, i, r_count[0], r_count[1]);
 	return (rt);
 }
